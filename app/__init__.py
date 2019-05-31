@@ -12,6 +12,7 @@ def create_app(test_config=None):
     )    
     load_config(app, test_config) 
     init_instance_folder(app) 
+    init_database(app)
     registes_blueprints(app)
         
     return app
@@ -35,6 +36,15 @@ def init_instance_folder(app):
         os.makedirs(app.instance_path)
     except OSError:
         pass        
+
+
+def init_database(app):
+    """Responsible for initializing and connecting 
+    to the database to be used by the application.
+    """
+
+    from .model import database
+    database.init_app(app)       
 
 
 def registes_blueprints(app):
