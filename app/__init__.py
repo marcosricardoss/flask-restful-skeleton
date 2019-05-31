@@ -3,12 +3,22 @@ import os
 from flask import Flask
 
 def create_app(test_config=None):
-    # create and configure the app
+    """Create and configure the app."""
+    
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
-        SECRET_KEY='dev', # TODO: to generate a random key
+        SECRET_KEY='dev',
         DATABASE=os.path.join(app.instance_path, 'app.sqlite'),
-    )
+    )    
+    load_config(app, test_config) 
+    init_instance_folder(app) 
+    registes_blueprints(app)
+        
+    return app
+
+
+def load_config(app, test_config): 
+    """Load the application's config"""
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
@@ -17,14 +27,18 @@ def create_app(test_config=None):
         # load the test config if passed in
         app.config.from_mapping(test_config)
 
-    # ensure the instance folder exists
+
+def init_instance_folder(app):
+    """Ensure the instance folder exists."""
+
     try:
         os.makedirs(app.instance_path)
     except OSError:
-        pass
+        pass        
 
-    # registes the blueprint to the application
+
+def registes_blueprints(app):
+    """Registes the blueprint to the application."""
+
     from .blueprint import index
     app.register_blueprint(index.bp)
-        
-    return app
