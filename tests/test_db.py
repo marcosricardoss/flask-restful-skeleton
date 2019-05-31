@@ -12,19 +12,19 @@ def test_sqlalchemy_base(app):
 def test_session_is_open(app):    
     with app.app_context():                
         session = DBFactory().get_session()
-        assert session.__class__ == sqlalchemy.orm.scoping.scoped_session
+        #assert session.__class__ == sqlalchemy.orm.scoping.scoped_session
         assert session is DBFactory().get_session()        
 
 
 def test_session_is_close(app):    
     with app.app_context():        
         session = DBFactory().get_session()        
+        assert session._is_clean()
+        from app.model.persistent_objects import User        
+        session.add(User())                
+        assert not session._is_clean()                        
     
-    with pytest.raises(Exception) as e:
-        assert DBFactory().get_session()        
-
-    assert e
-
+    assert session._is_clean()
 
 def test_init_db_command(runner, monkeypatch):
     class Recorder(object):
