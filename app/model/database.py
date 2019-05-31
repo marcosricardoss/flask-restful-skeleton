@@ -26,7 +26,7 @@ class DBFactory:
         """
 
         global Base                
-        connection_str = 'sqlite:////'+current_app.config['DATABASE_FILE']
+        connection_str = 'sqlite:////'+current_app.config['DATABASE']
         self.__engine = create_engine(connection_str, convert_unicode=True)        
         self.__session = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=self.__engine))        
         # using declarative class definitions
