@@ -7,6 +7,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
+from sqlalchemy.pool import Pool, NullPool
+
 Base = None
 
 class DBFactory:           
@@ -27,11 +29,11 @@ class DBFactory:
 
         global Base                
         connection_str = 'sqlite:////'+current_app.config['DATABASE']
-        self.__engine = create_engine(connection_str)        
-        self.__session = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=self.__engine))        
+        self.__engine = create_engine(connection_str)                
+        Session = sessionmaker(bind=self.__engine)
+        self.__session = Session()
         # using declarative class definitions
-        Base = declarative_base()
-        Base.query = self.__session.query_property()        
+        Base = declarative_base()           
 
     def create(self) -> None:
         """ Import all modules here that might define models so that
@@ -64,8 +66,8 @@ class DBFactory:
         """Checkig for a session in the g object and close it."""
 
         session = g.pop('session', None)        
-        if session is not None:    
-            session.remove()
+        if session is not None:                            
+            session.close()                                  
 
 
 @click.command('init-db')
