@@ -27,7 +27,7 @@ class DBFactory:
 
         global Base                
         connection_str = 'sqlite:////'+current_app.config['DATABASE']
-        self.__engine = create_engine(connection_str, convert_unicode=True)        
+        self.__engine = create_engine(connection_str)        
         self.__session = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=self.__engine))        
         # using declarative class definitions
         Base = declarative_base()
@@ -55,15 +55,16 @@ class DBFactory:
             self.__session: A SQLAlchemy Session object
         """        
         
-        g.session = self.__session
-        return self.__session
+        if 'session' not in g:
+            g.session = self.__session
+        return g.session
 
     @staticmethod
-    def shutdown_session(exception=None) -> None:
+    def shutdown_session(exception=None) -> None:        
         """Checkig for a session in the g object and close it."""
 
         session = g.pop('session', None)        
-        if session is not None:
+        if session is not None:    
             session.remove()
 
 
