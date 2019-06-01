@@ -12,8 +12,12 @@ def app():
     database_fd, database_file_path = tempfile.mkstemp()
 
     app = create_app({
-        'TESTING': True,
-        'DATABASE': database_file_path,
+        'TESTING': True,        
+        'HOST': "127.0.0.1",
+        'PORT': 3320,
+        'USER': "root",
+        'PASSWORD': "123",
+        'DATABASE': "olist_test"
     })    
     
     with app.app_context():
