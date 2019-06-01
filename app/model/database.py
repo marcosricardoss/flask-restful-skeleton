@@ -15,8 +15,8 @@ class DBFactory:
     """Class used to connect to application's configured database."""
 
     def __init__(self) -> None:
-        self.__session = None            
-        self.__engine = None
+        global Base                
+        Base = declarative_base()                   
         self.___init_database()
     
     def ___init_database(self)-> None:
@@ -27,7 +27,6 @@ class DBFactory:
         use declarative class definitions
         """
 
-        global Base                
         connection_str = "mysql+pymysql://{}:{}@{}:{}/{}".format(
                                                                 current_app.config['USER'], 
                                                                 current_app.config['PASSWORD'], 
@@ -35,10 +34,11 @@ class DBFactory:
                                                                 current_app.config['PORT'],
                                                                 current_app.config['DATABASE'])
         self.__engine = create_engine(connection_str)        
+        
+        # creating a new session 
         Session = sessionmaker(bind=self.__engine)
         self.__session = Session()
-        # using declarative class definitions
-        Base = declarative_base()           
+        
 
     def create(self) -> None:
         """ Import all modules here that might define models so that
