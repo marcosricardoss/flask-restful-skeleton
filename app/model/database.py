@@ -28,8 +28,13 @@ class DBFactory:
         """
 
         global Base                
-        connection_str = 'sqlite:////'+current_app.config['DATABASE']
-        self.__engine = create_engine(connection_str)                
+        connection_str = "mysql+pymysql://{}:{}@{}:{}/{}".format(
+                                                                current_app.config['USER'], 
+                                                                current_app.config['PASSWORD'], 
+                                                                current_app.config['HOST'],
+                                                                current_app.config['PORT'],
+                                                                current_app.config['DATABASE'])
+        self.__engine = create_engine(connection_str)        
         Session = sessionmaker(bind=self.__engine)
         self.__session = Session()
         # using declarative class definitions
