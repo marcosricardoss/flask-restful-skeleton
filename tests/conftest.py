@@ -8,13 +8,17 @@ from app.model.database import DBFactory
 
 @pytest.fixture
 def app():   
+    postgresql_uri = 'postgresql+psycopg2://{}:{}@{}:{}/{}'.format(
+        "postgres", 
+        "123", 
+        "127.0.0.1", 
+        15432, 
+        "olist_test"
+    ) 
+
     app = create_app({
-        'TESTING': True,        
-        'HOST': "127.0.0.1",
-        'PORT': 15432,
-        'USER': "postgres",
-        'PASSWORD': "123",
-        'DATABASE': "olist_test"        
+        'TESTING': True,                
+        'SQLALCHEMY_DATABASE_URI': postgresql_uri
     })    
     
     with app.app_context():
