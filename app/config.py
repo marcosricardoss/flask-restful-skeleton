@@ -1,18 +1,15 @@
 import os
 
-class Default(object):    
-    DEBUG = False
-    TESTING = False
+class Default(object):        
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
 class Production(Default):
     SECRET_KEY = b'\xacP=\x12\xa6\xa2\x19`\xbcu{\x0b\xe4&H\x8d'
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')    
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
 
 
-class Development(Default):
-    DEBUG = True    
+class Development(Default):    
     SECRET_KEY = 'dev'        
     SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://{}:{}@{}:{}/{}'.format("postgres", 
                                                                             "123", 
