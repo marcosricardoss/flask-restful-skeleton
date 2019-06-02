@@ -25,17 +25,9 @@ class DBFactory:
         This method initialize a session make and a sqlalchemy engine. 
         Then it use a internal factory function make possible to 
         use declarative class definitions
-        """
+        """        
 
-        connection_str = 'postgresql+psycopg2://{user}:{pw}@{url}:{pt}/{db}'
-        connection_str = connection_str.format(user=current_app.config['USER'],
-                                                pw=current_app.config['PASSWORD'],
-                                                url=current_app.config['HOST'],
-                                                pt=current_app.config['PORT'],
-                                                db=current_app.config['DATABASE'])
-
-        self.__engine = create_engine(connection_str)        
-        
+        self.__engine = create_engine(current_app.config['SQLALCHEMY_DATABASE_URI'])
         # creating a new session 
         Session = sessionmaker(bind=self.__engine)
         self.__session = Session()
