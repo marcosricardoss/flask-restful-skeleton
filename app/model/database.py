@@ -27,12 +27,13 @@ class DBFactory:
         use declarative class definitions
         """
 
-        connection_str = "mysql+pymysql://{}:{}@{}:{}/{}".format(
-                                                                current_app.config['USER'], 
-                                                                current_app.config['PASSWORD'], 
-                                                                current_app.config['HOST'],
-                                                                current_app.config['PORT'],
-                                                                current_app.config['DATABASE'])
+        connection_str = 'postgresql+psycopg2://{user}:{pw}@{url}:{pt}/{db}'
+        connection_str = connection_str.format(user=current_app.config['USER'],
+                                                pw=current_app.config['PASSWORD'],
+                                                url=current_app.config['HOST'],
+                                                pt=current_app.config['PORT'],
+                                                db=current_app.config['DATABASE'])
+
         self.__engine = create_engine(connection_str)        
         
         # creating a new session 
