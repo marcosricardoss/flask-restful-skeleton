@@ -17,11 +17,12 @@ def create_app(test_config=None):
 def load_config(app, test_config): 
     """Load the application's config"""    
 
-    if not test_config:
-        if os.environ.get('APP_SETTINGS'):
-            # load object config passed passed through 'APP_SETTINGS' environment variable
-            app.config.from_object(os.environ.get('APP_SETTINGS'))
+    if not test_config:        
+        if os.environ.get('FLASK_ENV') == 'development':
+            # load config object containing the development environment settings 
+            app.config.from_object('app.config.Development')
         else:
+            # load config object containing the production environment settings 
             app.config.from_object('app.config.Production')     
     else:
         # load the test config if passed in
