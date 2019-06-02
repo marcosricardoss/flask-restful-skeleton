@@ -15,11 +15,14 @@ def create_app(test_config=None):
 
 
 def load_config(app, test_config): 
-    """Load the application's config"""
+    """Load the application's config"""    
 
-    if test_config is None:
-        # load the instance config, if it exists, when not testing
-        app.config.from_pyfile('config.py', silent=True)
+    if not test_config:
+        if os.environ.get('APP_SETTINGS'):
+            # load object config passed passed through 'APP_SETTINGS' environment variable
+            app.config.from_object(os.environ.get('APP_SETTINGS'))
+        else:
+            app.config.from_object('app.config.Production')     
     else:
         # load the test config if passed in
         app.config.from_mapping(test_config)
