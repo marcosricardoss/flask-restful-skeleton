@@ -11,10 +11,10 @@ def app():
     app = create_app({
         'TESTING': True,        
         'HOST': "127.0.0.1",
-        'PORT': 3320,
-        'USER': "root",
+        'PORT': 15432,
+        'USER': "postgres",
         'PASSWORD': "123",
-        'DATABASE': "olist_test"
+        'DATABASE': "olist_test"        
     })    
     
     with app.app_context():
