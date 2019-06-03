@@ -1,36 +1,39 @@
-import pytest
+""" This module contains tests related to database operations """
+
+
 import sqlalchemy
 from app.model.database import DBFactory
 
 
-def test_sqlalchemy_base(app):    
-    with app.app_context():        
+def test_sqlalchemy_base(app):
+    with app.app_context():
         base = DBFactory().get_base()
         assert base.__class__ == sqlalchemy.ext.declarative.api.DeclarativeMeta
 
 
-def test_session_is_open(app):    
-    with app.app_context():                
+def test_session_is_open(app):
+    with app.app_context():
         session = DBFactory().get_session()
-        #assert session.__class__ == sqlalchemy.orm.scoping.scoped_session
-        assert session is DBFactory().get_session()        
+        assert session is DBFactory().get_session()
 
 
-def test_session_is_close(app):    
-    with app.app_context():        
-        session = DBFactory().get_session()        
+def test_session_is_close(app):
+    with app.app_context():
+        session = DBFactory().get_session()
         assert session._is_clean()
-        from app.model.persistent_objects import User        
-        session.add(User())                
-        assert not session._is_clean()                        
-    
+        from app.model.persistent_objects import User
+        session.add(User())
+        assert not session._is_clean()
+
+    # the session returned to pool
     assert session._is_clean()
 
+
 def test_init_db_command(runner, monkeypatch):
-    class Recorder(object):
+    class Recorder():
         called = False
 
-    def fake_init_db(db_factory):        
+    def fake_init_db(db_factory):
         Recorder.called = True
 
     monkeypatch.setattr('app.model.database.DBFactory.create', fake_init_db)

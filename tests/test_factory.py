@@ -1,3 +1,5 @@
+""" This module contains tests related to factory function """
+
 from app import create_app
 
 
