@@ -7,7 +7,7 @@ import os
 from dotenv import load_dotenv
 
 
-class Default(object):
+class Default():
     """Class containing the default settings for all environments.
 
     Constants:
