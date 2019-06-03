@@ -19,7 +19,7 @@ import os
 from flask import Flask
 
 
-def create_app(test_config=None):
+def create_app(test_config: dict = None) -> Flask:
     """This function is responsible to create a Flask instance according
     a previous setting passed from environment. In that process, it also
     initialise the database source.
@@ -40,7 +40,7 @@ def create_app(test_config=None):
     return app
 
 
-def load_config(app, test_config):
+def load_config(app: Flask, test_config: dict) -> None:
     """Load the application's config
 
     Parameters:
@@ -60,7 +60,7 @@ def load_config(app, test_config):
         app.config.from_mapping(test_config)
 
 
-def init_instance_folder(app):
+def init_instance_folder(app: Flask) -> None:
     """Ensure the instance folder exists.
 
     Parameters:
@@ -73,7 +73,7 @@ def init_instance_folder(app):
         pass
 
 
-def init_database(app):
+def init_database(app) -> None:
     """Responsible for initializing and connecting to the database
     to be used by the application.
 
@@ -85,7 +85,7 @@ def init_database(app):
     database.init_app(app)
 
 
-def registes_blueprints(app):
+def registes_blueprints(app: Flask) -> None:
     """Registes the blueprint to the application.
 
     Parameters:
