@@ -11,8 +11,7 @@ bp = Blueprint('index', __name__, url_prefix='')
 
 @bp.route('/', methods=['GET'])
 def index() -> str:
-    """
-    This function is responsible to deal with requests
+    """This function is responsible to deal with requests
     coming from index URL. It return a simple text indicating
     the server is running.
 
