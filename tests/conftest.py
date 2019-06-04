@@ -9,7 +9,7 @@ import pytest
 from dotenv import load_dotenv
 
 from app import create_app
-from app.model.database import DBFactory
+from app.model.database import Database
 
 
 @pytest.fixture
@@ -31,7 +31,7 @@ def app():
 
     # creating the database tables
     with app.app_context():
-        DBFactory().create()
+        Database().create()
 
     yield app
 
