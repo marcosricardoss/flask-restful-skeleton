@@ -15,7 +15,7 @@ from sqlalchemy.ext.declarative import declarative_base
 Base = None
 
 
-class DBFactory:
+class Database:
     """Class used to connect to application's configured database."""
 
     def __init__(self) -> None:
@@ -31,8 +31,7 @@ class DBFactory:
         use declarative class definitions
         """
 
-        self.__engine = create_engine(
-            current_app.config['SQLALCHEMY_DATABASE_URI'])
+        self.__engine = create_engine(current_app.config['SQLALCHEMY_DATABASE_URI'])
         # creating a new session
         Session = sessionmaker(bind=self.__engine)
         self.__session = Session()
@@ -55,7 +54,7 @@ class DBFactory:
     def get_session(self) -> sqlalchemy.orm.session.Session:
         """Provides the active current session and add it to the special object g.
 
-        Returns: 
+        Returns:
             self.__session: A SQLAlchemy Session object
         """
 
@@ -79,7 +78,7 @@ class DBFactory:
 def init_db_command() -> None:
     """Clear the existing data and create new tables."""
 
-    DBFactory().create()
+    Database().create()
     click.echo('Initialized the database.')
 
 
@@ -89,6 +88,6 @@ def init_app(app: Flask) -> None:
     """
 
     # attach the static shutdown_session to be execute when a request is ended.
-    app.teardown_appcontext(DBFactory.shutdown_session)
+    app.teardown_appcontext(Database.shutdown_session)
     # adding the init_db_command to line command input
     app.cli.add_command(init_db_command)

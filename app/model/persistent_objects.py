@@ -6,10 +6,10 @@ that is in the same class.
 
 
 from sqlalchemy import Column, Integer, String
-from app.model.database import DBFactory
+from app.model.database import Database
 
 
-Base = DBFactory().get_base()  # getting the declarative base
+Base = Database().get_base()  # getting the declarative base
 
 
 class User(Base):
