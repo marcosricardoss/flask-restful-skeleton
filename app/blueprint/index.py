@@ -1,5 +1,5 @@
-""" This module contains the 'index' Blueprint, which organize and
-group, views related  to the index endpoint of HTTP REST API.
+""" This module contains the 'index' Blueprint which organize and
+group, views related to the index endpoint of HTTP REST API.
 """
 
 
