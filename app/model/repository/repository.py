@@ -5,14 +5,14 @@ from abc import ABC, abstractmethod
 
 
 class Repository(ABC):
-    """The Repository class declares the abstract methods to do operations in the
+    """The Repository abstract class declares the abstract methods to do operations in the
     database. The Repository's subclasses can provide the implementation
     of these methods.
     """
 
     @abstractmethod
     def get(self, model_id: int) -> object:
-        """Retrieve a model indexed by a id.
+        """Retrieve a model register from database by its id.
 
         Parameters:
            model_id (int): Id of the model to be retrieved.
@@ -22,6 +22,7 @@ class Repository(ABC):
         """
 
         pass
+
 
     @abstractmethod
     def get_all(self) -> list:
@@ -45,7 +46,7 @@ class Repository(ABC):
 
     @abstractmethod
     def update(self, model: object) -> None:
-        """Update a existent model in the database.
+        """Update a existent model register in the database.
 
         Parameters:
            model (object): A model object.
@@ -55,13 +56,29 @@ class Repository(ABC):
 
     @abstractmethod
     def delete(self, model: object) -> int:
-        """Delete a existent model in the database.
+        """Delete a existent model register in the database.
 
         Parameters:
            model (object): A model object.
 
         Returns:
            int: the a model id that was deleted.
+        """
+
+        pass
+
+
+    @abstractmethod
+    def is_invalid(self, model: object, editing: bool = False) -> list:
+        """Checks if a given model object is valid.
+
+        Parameters:
+            user (User): The User model object.
+            editing (bool): Indicates whether the validation is for an editing.
+
+        Returns:
+            list: A list containing the fields errors.
+
         """
 
         pass
