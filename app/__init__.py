@@ -82,7 +82,7 @@ def init_database(app) -> None:
     """
 
     from .model import database
-    database.init_app(app)
+    database.init(app)
 
 
 def registes_blueprints(app: Flask) -> None:

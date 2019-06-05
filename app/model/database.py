@@ -1,93 +1,67 @@
-"""This module provides means to perform operations on the database using the SQLAlchemy library."""
+"""This module provides means to perform operations on the database
+using the SQLAlchemy library."""
+
 
 import click
 
 from flask import Flask
-from flask import current_app, g
 from flask.cli import with_appcontext
 
-import sqlalchemy
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import scoped_session, sessionmaker
 
 
 Base = None
+engine = None
+db_session = None
 
 
-class Database:
-    """Class used to connect to application's configured database."""
+def init(app: Flask) -> None:
+    """This function initialize the SQLAlchemy ORM, providing a session
+    and command line to create the tables in the database.
+    """
 
-    def __init__(self) -> None:
-        global Base
-        Base = declarative_base()
-        self.___init_database()
+    global Base, engine, db_session
+    engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
 
-    def ___init_database(self) -> None:
-        """Initialize the database.
+    # creating a new session
+    db_session = scoped_session(sessionmaker(autocommit=False,
+                                             autoflush=False,
+                                             bind=engine))
 
-        This method initialize a session make and a sqlalchemy engine.
-        Then it use a internal factory function make possible to
-        use declarative class definitions
-        """
+    # The declarative extension in SQLAlchemy allows to define
+    # tables and models in one go, that is in the same class
+    Base = declarative_base()
+    Base.query = db_session.query_property()
 
-        self.__engine = create_engine(current_app.config['SQLALCHEMY_DATABASE_URI'])
-        # creating a new session
-        Session = sessionmaker(bind=self.__engine)
-        self.__session = Session()
+    # attach the shutdown_session function to be execute when a request ended.
+    app.teardown_appcontext(shutdown_session)
 
-    def create(self) -> None:
-        """ Import all modules here that might define models so that
-        they will be registered properly on the metadata.
-        """
-        import app.model.persistent_objects
-        Base.metadata.create_all(bind=self.__engine)
+    # adding the init_db_command to line command input
+    app.cli.add_command(init_db_command)
 
-    def get_base(self) -> Base:
-        """Provides the base class for declarative class definitions.
 
-        Returns:
-            Base: A SQLAlchemy base class
-        """
-        return Base
+def shutdown_session(exception=None) -> None:
+    """Remove the session by send it back to the pool."""
 
-    def get_session(self) -> sqlalchemy.orm.session.Session:
-        """Provides the active current session and add it to the special object g.
+    db_session.remove()
 
-        Returns:
-            self.__session: A SQLAlchemy Session object
-        """
 
-        click.echo(self.__session)
+def init_db() -> None:
+    """Import all modules here that might define models so that
+    they will be registered properly on the metadata.
+    """
 
-        if 'session' not in g:
-            g.session = self.__session
-        return g.session
-
-    @staticmethod
-    def shutdown_session(exception=None) -> None:
-        """Checkig for a session in the g object and close it."""
-
-        session = g.pop('session', None)
-        if session is not None:
-            session.close()
+    import app.model.persistent_objects
+    Base.metadata.create_all(bind=engine)
 
 
 @click.command('init-db')
 @with_appcontext
 def init_db_command() -> None:
-    """Clear the existing data and create new tables."""
+    """This function is executed through the 'init-db' line
+    commando, than it creates the tables into the database."""
 
-    Database().create()
+    init_db()
     click.echo('Initialized the database.')
-
-
-def init_app(app: Flask) -> None:
-    """Register database functions with the Flask app. This is called by
-    the application factory.
-    """
-
-    # attach the static shutdown_session to be execute when a request is ended.
-    app.teardown_appcontext(Database.shutdown_session)
-    # adding the init_db_command to line command input
-    app.cli.add_command(init_db_command)
