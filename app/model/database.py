@@ -53,7 +53,7 @@ def init_db() -> None:
     they will be registered properly on the metadata.
     """
 
-    import app.model.persistent_objects
+    import app.model.models
     Base.metadata.create_all(bind=engine)
 
 
