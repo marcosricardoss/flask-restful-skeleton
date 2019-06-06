@@ -5,11 +5,25 @@ that is in the same class.
 """
 
 
+from abc import abstractmethod
+
 from sqlalchemy import Column, Integer, String
 from app.model.database import Base
 
 
-class User(Base):
+class Model:
+    """The Model class declare the serialize() abstract method that is
+    supposed to serializes the model data. The Model's subclasses
+    must provide a implementation of this method."""
+
+    @abstractmethod
+    def serialize(self) -> dict:
+        """Serialize the object attributes values into a dictionary."""
+
+        pass
+
+
+class User(Base, Model):
     """ User's model class.
 
     Column:
@@ -38,6 +52,20 @@ class User(Base):
 
         self.username = username
         self.password = password
+
+    def serialize(self) -> dict:
+        """Serialize the object attributes values into a dictionary.
+
+        Returns:
+           dict: a dictionary containing the attributes values
+        """
+
+        data = {
+            'id': str(self.id),
+            'name': self.username
+        }
+
+        return data
 
     def __repr__(self) -> str:
         return '<User %r>' % (self.username)
