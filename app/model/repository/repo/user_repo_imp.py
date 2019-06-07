@@ -6,25 +6,17 @@ from app.model.models import User
 from app.model.database import db_session
 from app.model.repository.repo.user_repository import UserRepository
 
+
 class UserRepositoryImp(UserRepository):
-    """This class implements the UserRepository abstract class. 
-    Contains specific method related to de User model to 
+    """This class implements the UserRepository abstract class.
+    Contains specific method related to de User model to
     do operation in the dabase.
-    """    
-    
-    def get(self, user_id) -> User:
-        """Retrieve a user from database by its id.
+    """
 
-        Parameters:
-           user_id (int): Id of the user model to be retrieved.
+    def __init__(self):
+        UserRepository.__init__(self, User)
 
-        Returns:
-           object: a user model object.
-        """
-
-        pass
-
-    def get_by_username(self, username:str) -> User:
+    def get_by_username(self, username: str) -> User:
         """Retrive a users from database by its username.
 
         Parameters:
@@ -34,17 +26,8 @@ class UserRepositoryImp(UserRepository):
             User: User model object.
         """
 
-        pass
-    
-    def get_all(self) -> list:
-        """Retrieves a list of all users from the database.
+        return db_session.query(User).filter_by(username=username).first()
 
-        Returns:
-           list: a list of user model objects.
-        """
-
-        pass
-    
     def save(self, user: User) -> None:
         """Saves a user in the database.
 
@@ -52,10 +35,10 @@ class UserRepositoryImp(UserRepository):
            model (User): A user model object.
         """
 
-        user.password = generate_password_hash(user.password)
+        user.password = self.__generate_password(user.password)
         db_session.add(user)
         db_session.commit()
-    
+
     def update(self, user: User) -> None:
         """Update a existent user in the database.
 
@@ -63,21 +46,10 @@ class UserRepositoryImp(UserRepository):
            model (object): A user model object.
         """
 
-        pass
-    
-    def delete(self, user: User) -> int:
-        """Delete a existent user in the database.
+        user.password = self.__generate_password(user.password)
+        db_session.commit()
 
-        Parameters:
-           model (object): A user object.
-
-        Returns:
-           int: the a user id that was deleted.
-        """
-
-        pass
-
-    def authenticate(self, username:str, password:str) -> bool:
+    def authenticate(self, username: str, password: str) -> bool:
         """checks user authenticity by username and password.
 
         Parameters:
@@ -89,10 +61,10 @@ class UserRepositoryImp(UserRepository):
         """
 
         return False
-        
-    def is_invalid(self, user:User, editing:bool=False) -> list:
+
+    def is_invalid(self, user: User, editing: bool = False) -> list:
         """Checks if a given model object is valid.
-        
+
         Parameters:
             user (User): The User model object.
             editing (bool): Indicates whether the validation is for an editing.
@@ -103,14 +75,22 @@ class UserRepositoryImp(UserRepository):
         """
 
         invalid = list()
-        
-        if not user.username:
-            invalid.append({"username": "Must be filled"})
 
-        """ if  not editing and self.customer_dao.get_customer_by_code(customer.code):
-            invalid.append(("Código", "Já em uso para outro cliente.")) """
+        if not user.username:
+            invalid.append({"username": "must be filled"})
 
         if not user.password:
-            invalid.append({"password": "Must be filled"})
+            invalid.append({"password": "must be filled"})
+
+        # verify if there another user with the same username
+        user_checking = self.get_by_username(user.username)
+        if user_checking:
+            if (not user.id) or (user.id != user_checking.id):
+                invalid.append(("username", "is already in use."))
 
         return invalid
+
+    def __generate_password(self, text):
+        """ """
+
+        return generate_password_hash(text)
