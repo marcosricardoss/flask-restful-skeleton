@@ -67,8 +67,7 @@ class Repository(ABC):
            int: the a model id that was deleted.
         """
 
-        deleted = db_session.delete(model)
-        print(deleted)
+        deleted = db_session.delete(model)        
         db_session.commit()
 
         return deleted
