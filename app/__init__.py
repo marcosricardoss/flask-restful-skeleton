@@ -92,6 +92,7 @@ def registes_blueprints(app: Flask) -> None:
         app (flask.app.Flask): The application instance Flask that'll be running
     """
 
-    from .blueprint import index, users
+    from .blueprint import index, users, auth
     app.register_blueprint(index.bp)
     app.register_blueprint(users.bp)
+    app.register_blueprint(auth.bp)
