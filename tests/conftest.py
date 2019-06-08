@@ -9,7 +9,7 @@ import pytest
 from dotenv import load_dotenv
 
 from app import create_app
-from app.model.database import init_db
+from app.model.database import init_db, clean_db, shutdown_session
 
 
 @pytest.fixture
@@ -35,6 +35,10 @@ def app():
 
     yield app
 
+    with app.app_context():        
+        clean_db()
+        init_db()        
+        
 
 @pytest.fixture
 def client(app):
