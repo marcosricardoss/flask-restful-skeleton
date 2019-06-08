@@ -56,6 +56,12 @@ def init_db() -> None:
     import app.model.models
     Base.metadata.create_all(bind=engine)
 
+def clean_db():    
+    """ """
+
+    import app.model.models           
+    Base.metadata.drop_all(bind=engine)
+    
 
 @click.command('init-db')
 @with_appcontext
