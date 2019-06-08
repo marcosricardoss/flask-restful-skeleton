@@ -62,7 +62,7 @@ class User(Base, Model):
 
         data = {
             'id': str(self.id),
-            'name': self.username
+            'username': self.username
         }
 
         return data
