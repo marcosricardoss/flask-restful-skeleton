@@ -86,7 +86,7 @@ class UserRepositoryImp(UserRepository):
         user_checking = self.get_by_username(user.username)
         if user_checking:
             if (not user.id) or (user.id != user_checking.id):
-                invalid.append(("username", "is already in use."))
+                invalid.append({"username": "is already in use."})
 
         return invalid
 
