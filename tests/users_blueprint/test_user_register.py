@@ -54,8 +54,8 @@ def test_user_register_without_password_returning_400_status_code(client):
     assert {'password': 'must be filled'} in response.json['data']
 
 
-def test_user_register_with_a_existent_username_returning_400_status_code(client):
-    user = create_user()
+def test_user_register_with_a_existent_username_returning_400_status_code(client, session):
+    user = create_user(session)
     data = {'username': user.username, 'password': "123"}
     response = client.post('/users',
                            data=json.dumps(data),
