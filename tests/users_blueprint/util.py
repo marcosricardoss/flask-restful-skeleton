@@ -1,25 +1,42 @@
 import time
 from datetime import datetime
+from sqlalchemy import desc
 
 
-def create_user():
+def create_user(session):
     """Creates new user.
+
+    Parameters:            
+        session: a SLQAlchmey Session object.
 
     Returns:
         user: A user model object.
     """
 
-    from app.model.database import db_session
     from app.model.models import User
 
     user = User()
     user.username = get_unique_username()
     user.password = "123"
 
-    db_session.add(user)
-    db_session.commit()
+    session.add(user)
+    session.commit()
 
     return user
+
+
+def get_users_count(session):
+    """Counts the amount of user contained in the database.
+    
+    Parameters:            
+        session: a SLQAlchmey Session object.
+
+    Returns:
+        An int value corresponding to the amount of registered user.
+    """
+
+    from app.model.models import User
+    return session.query(User).order_by(desc(User.id)).count()
 
 
 def get_unique_username():
