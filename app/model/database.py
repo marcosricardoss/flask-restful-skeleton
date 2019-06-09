@@ -48,7 +48,7 @@ def shutdown_session(exception=None) -> None:
     db_session.remove()
 
 
-def init_db() -> None:
+def init_db(test=None) -> None:
     """Import all modules here that might define models so that
     they will be registered properly on the metadata.
     """
@@ -56,12 +56,14 @@ def init_db() -> None:
     import app.model.models
     Base.metadata.create_all(bind=engine)
 
-def clean_db():    
-    """ """
 
-    import app.model.models           
+def drop_db() -> None:
+    """Remove all table from database."""
+
+    db_session.remove()
+    import app.model.models
     Base.metadata.drop_all(bind=engine)
-    
+
 
 @click.command('init-db')
 @with_appcontext
