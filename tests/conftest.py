@@ -3,25 +3,28 @@ the test. On that, it creates fixtures to get an application
 instance and simulates interactions over it.
 """
 
+
 import os
 import pytest
-
-from dotenv import load_dotenv
+import dotenv
 
 from app import create_app
-from app.model.database import init_db, clean_db, shutdown_session
+from app.model.database import init_db, drop_db
 
 
 @pytest.fixture
-def app():
+def app(request):
     """ Create a application instance from given settings.
+
+    Parameters:
+        request (FixtureRequest): A request for a fixture from a test or fixture function
 
     Returns:
         flask.app.Flask: The application instance
     """
 
-    # loading the test\.env to environment
-    load_dotenv()
+    # loading the .env to environment
+    dotenv.load_dotenv()
 
     # app instance
     app = create_app({
@@ -29,18 +32,22 @@ def app():
         'SQLALCHEMY_DATABASE_URI': os.environ.get('DATABASE_URL')
     })
 
-    # creating the database tables
-    with app.app_context():        
+    # add to the scope
+    ctx = app.app_context()
+    ctx.push()
+
+    def teardown():
+        drop_db()
         init_db()
+        ctx.pop()
 
-    yield app
+    init_db()
 
-    with app.app_context():        
-        clean_db()
-        init_db()        
-        
+    request.addfinalizer(teardown)
+    return app
 
-@pytest.fixture
+
+@pytest.fixture(scope='function')
 def client(app):
     """Create a client with app.test_client() using app fixture.
     Tests will use the client to make requests to the application
@@ -55,7 +62,28 @@ def client(app):
     return app.test_client()
 
 
-@pytest.fixture
+@pytest.fixture(scope='function')
+def session(app, request):
+    """Creates a new database session for a test.
+
+    Parameters:    
+        app (flask.app.Flask): The application instance.
+        request (FixtureRequest): A request for a fixture from a test or fixture function
+
+    Returns:
+        db_session: a SLQAlchmey Session object.
+    """
+
+    from app.model.database import db_session
+
+    def teardown():
+        db_session.remove()
+
+    request.addfinalizer(teardown)
+    return db_session
+
+
+@pytest.fixture(scope='function')
 def runner(app):
     """Create a runner with app.test_cli_runner() using app fixture, that
     can call the Click commands registered with the application.
