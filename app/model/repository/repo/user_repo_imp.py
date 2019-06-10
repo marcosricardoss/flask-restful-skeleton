@@ -1,6 +1,6 @@
 """This module contains a concrete class of the UserRepository abstract class."""
 
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from app.model.models import User
 from app.model.database import db_session
@@ -59,6 +59,10 @@ class UserRepositoryImp(UserRepository):
         Returns:
             bool: A boolean indicating the user authenticity.
         """
+        
+        user = self.get_by_username(username)
+        if user and check_password_hash(user.password, password):
+            return True            
 
         return False
 
