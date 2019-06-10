@@ -46,7 +46,8 @@ class Repository(ABC):
            model (Model): A model object.
         """
 
-        db_session.commit()
+        db_session.add(user)
+        db_session.commit()        
 
     def update(self, model: Model) -> None:
         """Update a existent model register in the database.
