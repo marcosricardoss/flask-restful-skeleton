@@ -2,7 +2,7 @@
 group, views related to the '/users' endpoint of HTTP REST API.
 """
 
-from flask import Blueprint, request, Response, make_response, jsonify
+from flask import abort, Blueprint, request, Response, make_response, jsonify
 
 from app.model.models import User
 from app.model.repository.fty.user_factory import UserRepositoryFactory
@@ -28,19 +28,13 @@ def get_user(user_id: int) -> Response:
     user_repository = UserRepositoryFactory().create()
     user = user_repository.get(user_id)
 
-    if user:        
-        response = make_response(jsonify({
+    if user:
+        return make_response(jsonify({
             'status': 'success',
             'data': user.serialize()
         }), 200)
 
-    else:        
-        response = make_response(jsonify({
-            'status': 'error',
-            'message': '"item does not exist"'
-        }), 404)
-
-    return response
+    abort(404)
 
 
 @bp.route('/<string:username>', methods=('GET',))
@@ -59,18 +53,13 @@ def get_user_by_username(username: str) -> Response:
     user_repository = UserRepositoryFactory().create()
     user = user_repository.get_by_username(username)
 
-    if user:        
-        response = make_response(jsonify({
+    if user:
+        return make_response(jsonify({
             'status': 'success',
             'data': user.serialize()
         }), 200)
-    else:        
-        response = make_response(jsonify({
-            'status': 'error',
-            'message': '"item does not exist"'
-        }), 404)
 
-    return response
+    abort(404)
 
 
 @bp.route('', methods=('GET',))
@@ -87,7 +76,7 @@ def get_users() -> Response:
     users = user_repository.get_all()
 
     data = [i.serialize() for i in users]
-    
+
     return make_response(jsonify({
         'status': 'success',
         'data': data
@@ -114,12 +103,12 @@ def register() -> Response:
     # validating the user
     is_invalid = user_repository.is_invalid(user)
     if not is_invalid:
-        user_repository.save(user)        
-        response = make_response(jsonify({
+        user_repository.save(user)
+        return make_response(jsonify({
             'status': 'success',
             'data': user.serialize()
         }), 200)
-    else:        
+    else:
         response = make_response(jsonify({
             'status': 'fail',
             'data': is_invalid
@@ -144,11 +133,8 @@ def update(user_id: int) -> Response:
     user_repository = UserRepositoryFactory().create()
     user = user_repository.get(user_id)
 
-    if not user:        
-        return make_response(jsonify({
-            'status': 'error',
-            'message': '"item does not exist"'
-        }), 404)
+    if not user:
+        abort(404)
 
     # updating the user
     user.username = request.json.get('username')
@@ -157,12 +143,12 @@ def update(user_id: int) -> Response:
     # validating the user
     is_invalid = user_repository.is_invalid(user)
     if not is_invalid:
-        user_repository.update(user)        
+        user_repository.update(user)
         response = make_response(jsonify({
             'status': 'success',
             'data': user.serialize()
         }), 200)
-    else:        
+    else:
         response = make_response(jsonify({
             'status': 'fail',
             'data': is_invalid
@@ -187,11 +173,8 @@ def patch(user_id: int) -> Response:
     user_repository = UserRepositoryFactory().create()
     user = user_repository.get(user_id)
 
-    if not user:        
-        return make_response(jsonify({
-            'status': 'error',
-            'message': '"item does not exist"'
-        }), 404)
+    if not user:
+        abort(404)
 
     # update the object values
     for key, value in request.json.items():
@@ -200,12 +183,12 @@ def patch(user_id: int) -> Response:
     # validating the user
     is_invalid = user_repository.is_invalid(user)
     if not is_invalid:
-        user_repository.update(user)        
+        user_repository.update(user)
         response = make_response(jsonify({
             'status': 'success',
             'data': user.serialize()
         }), 200)
-    else:        
+    else:
         response = make_response(jsonify({
             'status': 'fail',
             'data': is_invalid
