@@ -35,7 +35,7 @@ class UserRepositoryImp(UserRepository):
            model (User): A user model object.
         """
 
-        user.password = self.__generate_password(user.password)
+        user.password = generate_password_hash(user.password)
         db_session.add(user)
         db_session.commit()
 
@@ -46,7 +46,7 @@ class UserRepositoryImp(UserRepository):
            model (object): A user model object.
         """
 
-        user.password = self.__generate_password(user.password)
+        user.password = generate_password_hash(user.password)
         db_session.commit()
 
     def authenticate(self, username: str, password: str) -> bool:
@@ -59,10 +59,10 @@ class UserRepositoryImp(UserRepository):
         Returns:
             bool: A boolean indicating the user authenticity.
         """
-        
+
         user = self.get_by_username(username)
         if user and check_password_hash(user.password, password):
-            return True            
+            return True
 
         return False
 
@@ -93,8 +93,3 @@ class UserRepositoryImp(UserRepository):
                 invalid.append({"username": "is already in use."})
 
         return invalid
-
-    def __generate_password(self, text):
-        """ """
-
-        return generate_password_hash(text)
