@@ -92,6 +92,11 @@ def registes_blueprints(app: Flask) -> None:
         app (flask.app.Flask): The application instance Flask that'll be running
     """
 
+    # error handlers
+    from .blueprint.handler import register_handler
+    register_handler(app)
+    
+    # error Handlers
     from .blueprint import index, users, auth
     app.register_blueprint(index.bp)
     app.register_blueprint(users.bp)
