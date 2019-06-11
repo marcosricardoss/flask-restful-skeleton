@@ -4,12 +4,7 @@
 from flask_httpauth import HTTPBasicAuth
 from app.model.repository.fty.user_factory import UserRepositoryFactory
 from flask import make_response, jsonify
-from ..output import ErrorOutput
 
-
-HTTP_CODE = 401
-MSG = "Could not verify your access level for that URL. You have to login with proper credentials"
-HEADERS = [('WWW-Authenticate', 'Basic realm="Login Required"')]
 
 auth = HTTPBasicAuth()
 user_repository = UserRepositoryFactory().create()
@@ -38,4 +33,12 @@ def unauthorized():
         A flask response object.
     """
 
-    return ErrorOutput(HTTP_CODE, MSG, HEADERS).create()
+    msg = "Could not verify your access level for that URL. You have to login with proper credentials"
+
+    response = make_response(jsonify({
+        'status': 'error',
+        'message': msg
+    }), 401)
+    response.headers.add('WWW-Authenticate', 'Basic realm="Login Required"')
+
+    return response
