@@ -1,5 +1,7 @@
+"""Contains useful function to the blueprint user tests."""
+
+
 import time
-from datetime import datetime
 from sqlalchemy import desc
 from werkzeug.security import generate_password_hash
 
@@ -7,7 +9,7 @@ from werkzeug.security import generate_password_hash
 def create_user(session):
     """Creates new user.
 
-    Parameters:            
+    Parameters:
         session: a SLQAlchmey Session object.
 
     Returns:
@@ -29,7 +31,7 @@ def create_user(session):
 def get_users_count(session):
     """Counts the amount of user contained in the database.
 
-    Parameters:            
+    Parameters:
         session: a SLQAlchmey Session object.
 
     Returns:

@@ -15,7 +15,7 @@ def test_config_not_testing():
 def test_config_testing():
     load_dotenv()
     config = {
-        'TESTING': True, 
+        'TESTING': True,
         'SQLALCHEMY_DATABASE_URI': os.environ.get('DATABASE_URL')
     }
     assert create_app(config).testing

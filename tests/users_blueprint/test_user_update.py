@@ -23,14 +23,16 @@ def test_user_update_with_data_well_formatted_returning_200_status_code(client, 
 
 def test_user_update_with_inexistent_user_id_returning_404_status_code(client, auth):
     endpoint = '/users/{}'.format(get_unique_id())
-    response = client.put(endpoint, content_type='application/json', headers=auth)
+    response = client.put(
+        endpoint, content_type='application/json', headers=auth)
     assert response.status_code == 404
 
 
 def test_user_update_without_data_returning_400_status_code(client, session, auth):
     user = create_user(session)
     endpoint = '/users/{}'.format(user.id)
-    response = client.put(endpoint, content_type='application/json', headers=auth)
+    response = client.put(
+        endpoint, content_type='application/json', headers=auth)
     assert response.status_code == 400
 
 

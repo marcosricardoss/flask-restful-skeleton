@@ -1,8 +1,6 @@
+"""It contains tests for user retrieving endpoints."""
+
 import pytest
-
-from datetime import datetime
-
-from flask import json
 from .util import create_user, get_unique_username, get_unique_id, get_users_count
 
 

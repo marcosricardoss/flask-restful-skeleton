@@ -1,8 +1,6 @@
-import base64
+"""It contains tests for user exclusion endpoints."""
 
-from datetime import datetime
 
-from flask import json
 from .util import create_user, get_unique_id
 
 

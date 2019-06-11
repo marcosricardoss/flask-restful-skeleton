@@ -1,6 +1,5 @@
-"""This module is responsible to initial configuration of
-the test. On that, it creates fixtures to get an application
-instance and simulates interactions over it.
+"""This module is responsible to initial configuration of the test. On that, 
+it creates fixtures to get an applicationinstance and simulates interactions over it.
 """
 
 
@@ -109,14 +108,14 @@ def auth(app, request):
     Returns:
        headers: a dictionary with HTTP authorization header for a basic authentication
     """
-    
+
     import base64
     from app.model.models import User
     from werkzeug.security import generate_password_hash
     from app.model.database import db_session
-    
+
     user = db_session.query(User).filter_by(username='test').first()
-    
+
     if not user:
         user = User()
         user.username = 'test'
@@ -125,7 +124,7 @@ def auth(app, request):
         db_session.add(user)
         db_session.commit()
 
-    encoded = base64.b64encode(b'test:test').decode('utf-8')        
-    headers={'Authorization': 'Basic ' + encoded}
+    encoded = base64.b64encode(b'test:test').decode('utf-8')
+    headers = {'Authorization': 'Basic ' + encoded}
 
     return headers
