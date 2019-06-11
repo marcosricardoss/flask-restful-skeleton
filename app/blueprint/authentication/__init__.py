@@ -2,7 +2,7 @@
 
 
 from flask_httpauth import HTTPBasicAuth
-from app.model.repository.fty.user_factory import UserRepositoryFactory
+from app.model.repository.factory import UserRepositoryFactory
 from flask import make_response, jsonify
 
 

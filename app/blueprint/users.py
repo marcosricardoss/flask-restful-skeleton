@@ -5,7 +5,7 @@ group, views related to the '/users' endpoint of HTTP REST API.
 from flask import abort, Blueprint, request, Response, make_response, jsonify
 
 from app.model.models import User
-from app.model.repository.fty.user_factory import UserRepositoryFactory
+from ..model.repository.factory import UserRepositoryFactory
 from app.blueprint.authentication import auth
 
 
