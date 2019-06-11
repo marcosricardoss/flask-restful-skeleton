@@ -3,7 +3,7 @@ import pytest
 from datetime import datetime
 
 from flask import json
-from util import create_user, get_unique_username, get_unique_id, get_users_count
+from .util import create_user, get_unique_username, get_unique_id, get_users_count
 
 
 def test_user_retrieve_with_existent_user_id_returning_200_status_code(client, session, auth):

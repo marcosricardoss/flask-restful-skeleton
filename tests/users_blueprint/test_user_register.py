@@ -1,5 +1,5 @@
 from flask import json
-from util import create_user, get_unique_username
+from .util import create_user, get_unique_username
 
 def test_user_register_with_data_well_formatted_returning_200_status_code(client, auth):
     data = {'username': get_unique_username(), 'password': "123"}

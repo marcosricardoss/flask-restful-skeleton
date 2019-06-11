@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from flask import json
-from util import create_user, get_unique_username, get_unique_id
+from .util import create_user, get_unique_username, get_unique_id
 
 
 def test_user_update_with_data_well_formatted_returning_200_status_code(client, session, auth):
