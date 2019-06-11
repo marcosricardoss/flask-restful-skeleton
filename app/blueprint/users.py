@@ -214,5 +214,6 @@ def delete(user_id: int) -> Response:
     user = user_repository.get(user_id)
     if user:
         user_repository.delete(user)
+        return make_response('', 201)
 
-    return make_response('', 201)
+    abort(404)
