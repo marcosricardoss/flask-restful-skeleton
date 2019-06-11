@@ -1,6 +1,7 @@
 import time
 from datetime import datetime
 from sqlalchemy import desc
+from werkzeug.security import generate_password_hash
 
 
 def create_user(session):
@@ -17,7 +18,7 @@ def create_user(session):
 
     user = User()
     user.username = get_unique_username()
-    user.password = "123"
+    user.password = generate_password_hash("123")
 
     session.add(user)
     session.commit()
@@ -27,7 +28,7 @@ def create_user(session):
 
 def get_users_count(session):
     """Counts the amount of user contained in the database.
-    
+
     Parameters:            
         session: a SLQAlchmey Session object.
 
