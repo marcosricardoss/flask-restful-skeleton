@@ -47,7 +47,7 @@ class Repository(ABC):
         """
 
         db_session.add(user)
-        db_session.commit()        
+        db_session.commit()
 
     def update(self, model: Model) -> None:
         """Update a existent model register in the database.
@@ -68,29 +68,10 @@ class Repository(ABC):
            int: the a model id that was deleted.
         """
 
-        deleted = db_session.delete(model)        
+        deleted = db_session.delete(model)
         db_session.commit()
 
         return deleted
-
-    def delete_list(self, models):
-        """Delete a list of models registered in the database.
-
-        Parameters:
-           models (list): A model object list.
-
-        Returns:
-           int: the a model id that was deleted.
-        """
-
-        deleted_list = list()
-        for model in models:
-            deleted = db_session.delete(model)
-            deleted_list.append(deleted)
-
-        db_session.commit()
-
-        return deleted_list
 
     @abstractmethod
     def is_invalid(self, model: Model, editing: bool = False) -> list:
