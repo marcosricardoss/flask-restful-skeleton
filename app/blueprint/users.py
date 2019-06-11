@@ -6,14 +6,15 @@ from flask import Blueprint, request, Response
 
 from app.model.models import User
 from app.model.repository.fty.user_factory import UserRepositoryFactory
-from app.blueprint.authentication import requires_basic_auth
 from app.blueprint.output import SuccessOutput, FailOutput, ErrorOutput, SuccessEmptyOutput
+from app.blueprint.authentication import auth
 
 
 bp = Blueprint('users', __name__, url_prefix='/users')
 
 
 @bp.route('/<int:user_id>', methods=('GET',))
+@auth.login_required
 def get_user(user_id: int) -> Response:
     """This function is responsible to deal with GET
     requests coming from /users/<int:id> endpoint.
@@ -30,6 +31,7 @@ def get_user(user_id: int) -> Response:
 
     if user:
         response = SuccessOutput(status_code=200, data=user.serialize()).create()
+        
     else:
         response = ErrorOutput(status_code=404, message="item does not exist").create()
 
@@ -37,6 +39,7 @@ def get_user(user_id: int) -> Response:
 
 
 @bp.route('/<string:username>', methods=('GET',))
+@auth.login_required
 def get_user_by_username(username: str) -> Response:
     """This function is responsible to deal with GET
     requests coming from /users/<string:username> endpoint.
@@ -60,6 +63,7 @@ def get_user_by_username(username: str) -> Response:
 
 
 @bp.route('', methods=('GET',))
+@auth.login_required
 def get_users() -> Response:
     """This function is responsible to deal with GET
     requests coming from /users endpoint.
@@ -77,6 +81,7 @@ def get_users() -> Response:
 
 
 @bp.route('', methods=('POST',))
+@auth.login_required
 def register() -> Response:
     """This function is responsible to deal with POST
     requests coming from /users endpoint.
@@ -104,6 +109,7 @@ def register() -> Response:
 
 
 @bp.route('/<int:user_id>', methods=('PUT',))
+@auth.login_required
 def update(user_id: int) -> Response:
     """This function is responsible to deal with PUT
     requests coming from /users/<int:id> endpoint.
@@ -137,7 +143,7 @@ def update(user_id: int) -> Response:
 
 
 @bp.route('/<int:user_id>', methods=('PATCH',))
-
+@auth.login_required
 def patch(user_id: int) -> Response:
     """This function is responsible to deal with PUT
     requests coming from /users/<int:id> endpoint.
@@ -171,6 +177,7 @@ def patch(user_id: int) -> Response:
 
 
 @bp.route('/<int:user_id>', methods=('DELETE',))
+@auth.login_required
 def delete(user_id: int) -> Response:
     """This function is responsible to deal with DELETE
     requests coming from /users/<int:id> endpoint.
