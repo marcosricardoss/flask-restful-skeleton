@@ -2,11 +2,10 @@
 group, views related to the '/users' endpoint of HTTP REST API.
 """
 
-from flask import Blueprint, request, Response
+from flask import Blueprint, request, Response, make_response, jsonify
 
 from app.model.models import User
 from app.model.repository.fty.user_factory import UserRepositoryFactory
-from app.blueprint.output import SuccessOutput, FailOutput, ErrorOutput, SuccessEmptyOutput
 from app.blueprint.authentication import auth
 
 
@@ -27,13 +26,21 @@ def get_user(user_id: int) -> Response:
     """
 
     user_repository = UserRepositoryFactory().create()
-    user = user_repository.get(user_id)
+    user = user_repository.get(user_id)   
 
     if user:
-        response = SuccessOutput(status_code=200, data=user.serialize()).create()
-        
+        output = {
+            'status': 'success',
+            'data': user.serialize()
+        }
+        response = make_response(jsonify(output), 200)
+
     else:
-        response = ErrorOutput(status_code=404, message="item does not exist").create()
+        output = {
+            'status': 'error',
+            'message': '"item does not exist"'
+        }
+        response = make_response(jsonify(output), 404)        
 
     return response
 
@@ -55,9 +62,17 @@ def get_user_by_username(username: str) -> Response:
     user = user_repository.get_by_username(username)
 
     if user:
-        response = SuccessOutput(status_code=200, data=user.serialize()).create()        
+        output = {
+            'status': 'success',
+            'data': user.serialize()
+        }
+        response = make_response(jsonify(output), 200)        
     else:
-        response = ErrorOutput(status_code=404, message="item does not exist").create()
+        output = {
+            'status': 'error',
+            'message': '"item does not exist"'
+        }
+        response = make_response(jsonify(output), 404)
 
     return response
 
@@ -76,8 +91,12 @@ def get_users() -> Response:
     users = user_repository.get_all()
 
     data = [i.serialize() for i in users]
-
-    return SuccessOutput(status_code=200, data=data).create()
+    
+    output = {
+        'status': 'success',
+        'data': data
+    }
+    return make_response(jsonify(output), 200)
 
 
 @bp.route('', methods=('POST',))
@@ -100,10 +119,18 @@ def register() -> Response:
     # validating the user
     is_invalid = user_repository.is_invalid(user)
     if not is_invalid:
-        user_repository.save(user)
-        response = SuccessOutput(status_code=200, data=user.serialize()).create()
+        user_repository.save(user)        
+        output = {
+            'status': 'success',
+            'data': user.serialize()
+        }
+        response = make_response(jsonify(output), 200)        
     else:
-        response = FailOutput(status_code=400, data=is_invalid).create()
+        output = {
+            'status': 'fail',
+            'data': is_invalid
+        }
+        response = make_response(jsonify(output), 400)
 
     return response
 
@@ -125,7 +152,11 @@ def update(user_id: int) -> Response:
     user = user_repository.get(user_id)
 
     if not user:        
-        return ErrorOutput(status_code=404, message="item does not exist").create()
+        output = {
+            'status': 'error',
+            'message': '"item does not exist"'
+        }
+        return make_response(jsonify(output), 404)
 
     # updating the user
     user.username = request.json.get('username')
@@ -135,9 +166,17 @@ def update(user_id: int) -> Response:
     is_invalid = user_repository.is_invalid(user)
     if not is_invalid:
         user_repository.update(user)        
-        response = SuccessOutput(status_code=200, data=user.serialize()).create()        
+        output = {
+            'status': 'success',
+            'data': user.serialize()
+        }
+        response = make_response(jsonify(output), 200)        
     else:        
-        response = FailOutput(status_code=400, data=is_invalid).create()
+        output = {
+            'status': 'fail',
+            'data': is_invalid
+        }
+        response = make_response(jsonify(output), 400)
 
     return response
 
@@ -159,7 +198,11 @@ def patch(user_id: int) -> Response:
     user = user_repository.get(user_id)
 
     if not user:
-        return ErrorOutput(status_code=404, message="item does not exist").create()
+        output = {
+            'status': 'error',
+            'message': '"item does not exist"'
+        }
+        return make_response(jsonify(output), 404)
 
     # update the object values
     for key, value in request.json.items():
@@ -169,9 +212,17 @@ def patch(user_id: int) -> Response:
     is_invalid = user_repository.is_invalid(user)
     if not is_invalid:
         user_repository.update(user)        
-        response = SuccessOutput(status_code=200, data=user.serialize()).create()        
+        output = {
+            'status': 'success',
+            'data': user.serialize()
+        }
+        response = make_response(jsonify(output), 200)
     else:
-        response = FailOutput(status_code=400, data=is_invalid).create()
+        output = {
+            'status': 'fail',
+            'data': is_invalid
+        }
+        response = make_response(jsonify(output), 400)
 
     return response
 
@@ -194,4 +245,4 @@ def delete(user_id: int) -> Response:
     if user:
         user_repository.delete(user)
     
-    return SuccessEmptyOutput(status_code=201).create()
+    return make_response('', 201)
