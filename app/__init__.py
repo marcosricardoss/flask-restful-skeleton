@@ -97,7 +97,6 @@ def registes_blueprints(app: Flask) -> None:
     register_handler(app)
     
     # error Handlers
-    from .blueprint import index, users, auth
+    from .blueprint import index, users
     app.register_blueprint(index.bp)
-    app.register_blueprint(users.bp)
-    app.register_blueprint(auth.bp)
+    app.register_blueprint(users.bp)   
