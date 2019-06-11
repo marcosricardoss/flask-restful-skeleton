@@ -110,7 +110,7 @@ def auth(app, request):
     """
 
     import base64
-    from app.model.models import User
+    from app.model.po import User
     from werkzeug.security import generate_password_hash
     from app.model.database import db_session
 

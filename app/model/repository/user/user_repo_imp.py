@@ -2,7 +2,7 @@
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from app.model.models import User
+from app.model.po import User
 from app.model.database import db_session
 from app.model.repository.user.user_repository import UserRepository
 

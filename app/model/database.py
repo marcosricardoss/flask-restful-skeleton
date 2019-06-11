@@ -53,7 +53,7 @@ def init_db(test=None) -> None:
     they will be registered properly on the metadata.
     """
 
-    import app.model.models
+    import app.model.po
     Base.metadata.create_all(bind=engine)
 
 
@@ -61,7 +61,7 @@ def drop_db() -> None:
     """Remove all table from database."""
 
     db_session.remove()
-    import app.model.models
+    import app.model.po
     Base.metadata.drop_all(bind=engine)
 
 

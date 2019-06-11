@@ -5,7 +5,7 @@ from __future__ import annotations
 from abc import abstractmethod
 
 from app.model.repository.repository import Repository
-from app.model.models import User
+from app.model.po import User
 
 
 class UserRepository(Repository):
