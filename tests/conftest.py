@@ -96,3 +96,36 @@ def runner(app):
     """
 
     return app.test_cli_runner()
+
+
+@pytest.fixture
+def auth(app, request):
+    """Creates HTTP authorization header for a basic authentication.
+
+    Parameters:    
+        app (flask.app.Flask): The application instance.
+        request (FixtureRequest): A request for a fixture from a test or fixture function
+
+    Returns:
+       headers: a dictionary with HTTP authorization header for a basic authentication
+    """
+    
+    import base64
+    from app.model.models import User
+    from werkzeug.security import generate_password_hash
+    from app.model.database import db_session
+    
+    user = db_session.query(User).filter_by(username='test').first()
+    
+    if not user:
+        user = User()
+        user.username = 'test'
+        user.password = generate_password_hash('test')
+
+        db_session.add(user)
+        db_session.commit()
+
+    encoded = base64.b64encode(b'test:test').decode('utf-8')        
+    headers={'Authorization': 'Basic ' + encoded}
+
+    return headers
