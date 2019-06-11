@@ -46,7 +46,7 @@ class Repository(ABC):
            model (Model): A model object.
         """
 
-        db_session.add(user)
+        db_session.add(model)
         db_session.commit()
 
     def update(self, model: Model) -> None:

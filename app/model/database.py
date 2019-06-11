@@ -48,7 +48,7 @@ def shutdown_session(exception=None) -> None:
     db_session.remove()
 
 
-def init_db(test=None) -> None:
+def init_db() -> None:
     """Import all modules here that might define models so that
     they will be registered properly on the metadata.
     """

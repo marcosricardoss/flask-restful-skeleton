@@ -1,4 +1,4 @@
-"""This module define all models (persistent objects) of application. Each model
+"""This module define all models (persistent objects - PO) of application. Each model
 is a subclasse of the Base class (base declarative) from app.model.database module.
 The declarative extension in SQLAlchemy allows to define tables and models in one go,
 that is in the same class.

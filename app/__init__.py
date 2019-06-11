@@ -1,7 +1,5 @@
-"""This package is a solution to the problem used by the Olist
-company to evaluate the candidate skills.
-
-Original repository: https://github.com/olist/work-at-olist
+"""This package is  HTTP REST API template that already has the database bootstrap
+implemented and also all feature related with the user authentications.
 
 Application features:
     Python 3.7
@@ -95,8 +93,8 @@ def registes_blueprints(app: Flask) -> None:
     # error handlers
     from .blueprint.handler import register_handler
     register_handler(app)
-    
+
     # error Handlers
     from .blueprint import index, users
     app.register_blueprint(index.bp)
-    app.register_blueprint(users.bp)   
+    app.register_blueprint(users.bp)
