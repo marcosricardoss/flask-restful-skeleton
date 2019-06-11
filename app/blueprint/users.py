@@ -26,21 +26,19 @@ def get_user(user_id: int) -> Response:
     """
 
     user_repository = UserRepositoryFactory().create()
-    user = user_repository.get(user_id)   
+    user = user_repository.get(user_id)
 
-    if user:
-        output = {
+    if user:        
+        response = make_response(jsonify({
             'status': 'success',
             'data': user.serialize()
-        }
-        response = make_response(jsonify(output), 200)
+        }), 200)
 
-    else:
-        output = {
+    else:        
+        response = make_response(jsonify({
             'status': 'error',
             'message': '"item does not exist"'
-        }
-        response = make_response(jsonify(output), 404)        
+        }), 404)
 
     return response
 
@@ -61,18 +59,16 @@ def get_user_by_username(username: str) -> Response:
     user_repository = UserRepositoryFactory().create()
     user = user_repository.get_by_username(username)
 
-    if user:
-        output = {
+    if user:        
+        response = make_response(jsonify({
             'status': 'success',
             'data': user.serialize()
-        }
-        response = make_response(jsonify(output), 200)        
-    else:
-        output = {
+        }), 200)
+    else:        
+        response = make_response(jsonify({
             'status': 'error',
             'message': '"item does not exist"'
-        }
-        response = make_response(jsonify(output), 404)
+        }), 404)
 
     return response
 
@@ -92,11 +88,10 @@ def get_users() -> Response:
 
     data = [i.serialize() for i in users]
     
-    output = {
+    return make_response(jsonify({
         'status': 'success',
         'data': data
-    }
-    return make_response(jsonify(output), 200)
+    }), 200)
 
 
 @bp.route('', methods=('POST',))
@@ -120,17 +115,15 @@ def register() -> Response:
     is_invalid = user_repository.is_invalid(user)
     if not is_invalid:
         user_repository.save(user)        
-        output = {
+        response = make_response(jsonify({
             'status': 'success',
             'data': user.serialize()
-        }
-        response = make_response(jsonify(output), 200)        
-    else:
-        output = {
+        }), 200)
+    else:        
+        response = make_response(jsonify({
             'status': 'fail',
             'data': is_invalid
-        }
-        response = make_response(jsonify(output), 400)
+        }), 400)
 
     return response
 
@@ -152,11 +145,10 @@ def update(user_id: int) -> Response:
     user = user_repository.get(user_id)
 
     if not user:        
-        output = {
+        return make_response(jsonify({
             'status': 'error',
             'message': '"item does not exist"'
-        }
-        return make_response(jsonify(output), 404)
+        }), 404)
 
     # updating the user
     user.username = request.json.get('username')
@@ -166,17 +158,15 @@ def update(user_id: int) -> Response:
     is_invalid = user_repository.is_invalid(user)
     if not is_invalid:
         user_repository.update(user)        
-        output = {
+        response = make_response(jsonify({
             'status': 'success',
             'data': user.serialize()
-        }
-        response = make_response(jsonify(output), 200)        
+        }), 200)
     else:        
-        output = {
+        response = make_response(jsonify({
             'status': 'fail',
             'data': is_invalid
-        }
-        response = make_response(jsonify(output), 400)
+        }), 400)
 
     return response
 
@@ -197,12 +187,11 @@ def patch(user_id: int) -> Response:
     user_repository = UserRepositoryFactory().create()
     user = user_repository.get(user_id)
 
-    if not user:
-        output = {
+    if not user:        
+        return make_response(jsonify({
             'status': 'error',
             'message': '"item does not exist"'
-        }
-        return make_response(jsonify(output), 404)
+        }), 404)
 
     # update the object values
     for key, value in request.json.items():
@@ -212,17 +201,15 @@ def patch(user_id: int) -> Response:
     is_invalid = user_repository.is_invalid(user)
     if not is_invalid:
         user_repository.update(user)        
-        output = {
+        response = make_response(jsonify({
             'status': 'success',
             'data': user.serialize()
-        }
-        response = make_response(jsonify(output), 200)
-    else:
-        output = {
+        }), 200)
+    else:        
+        response = make_response(jsonify({
             'status': 'fail',
             'data': is_invalid
-        }
-        response = make_response(jsonify(output), 400)
+        }), 400)
 
     return response
 
@@ -244,5 +231,5 @@ def delete(user_id: int) -> Response:
     user = user_repository.get(user_id)
     if user:
         user_repository.delete(user)
-    
+
     return make_response('', 201)
