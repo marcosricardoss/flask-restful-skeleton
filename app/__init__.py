@@ -1,4 +1,4 @@
-"""This package is  HTTP REST API template that already has the database bootstrap
+"""This package is Flask HTTP REST API Template template that already has the database bootstrap
 implemented and also all feature related with the user authentications.
 
 Application features:
