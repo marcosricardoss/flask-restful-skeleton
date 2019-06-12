@@ -30,10 +30,12 @@ def create_app(test_config: dict = None) -> Flask:
     """
 
     app = Flask(__name__, instance_relative_config=True)
+    
     load_config(app, test_config)
+    
     init_instance_folder(app)
     init_database(app)
-    registes_blueprints(app)
+    init_blueprints(app)
     init_commands(app)
 
     return app
@@ -84,7 +86,7 @@ def init_database(app) -> None:
     database.init(app)
 
 
-def registes_blueprints(app: Flask) -> None:
+def init_blueprints(app: Flask) -> None:
     """Registes the blueprint to the application.
 
     Parameters:
