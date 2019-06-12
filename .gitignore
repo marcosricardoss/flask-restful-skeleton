@@ -1,0 +1,31 @@
+*.py[co]
+.DS_Store
+.idea
+*.swp*
+*~
+*.tmproj
+*.log
+.env
+tmp
+
+# virtual env
+venv/
+
+*.pyc
+__pycache__/
+
+# flask instance
+instance/
+
+# tests
+.pytest_cache/
+.coverage
+htmlcov/
+
+# dist
+dist/
+build/
+*.egg-info/
+
+# visual code
+.vscode/
