@@ -8,7 +8,23 @@ import pytest
 import dotenv
 
 from app import create_app
-from app.model.database import init_db, drop_db
+
+
+def init_db() -> None:
+    """Import all modules here that might define models so that
+    they will be registered properly on the metadata.
+    """
+
+    import app.model.po
+    from app.model.database import Base, engine
+    Base.metadata.create_all(bind=engine)
+
+
+def drop_db() -> None:
+    """Remove all table from database."""
+
+    from app.model.database import Base, engine
+    Base.metadata.drop_all(bind=engine)
 
 
 @pytest.fixture
