@@ -29,19 +29,6 @@ def test_session_is_close(app):
     assert db_session()._is_clean()
 
 
-def test_init_db_command(runner, monkeypatch):
-    class Recorder():
-        called = False
-
-    def fake_init_db():
-        Recorder.called = True
-
-    monkeypatch.setattr('app.model.database.init_db', fake_init_db)
-    result = runner.invoke(args=['init-db'])
-    assert 'Initialized' in result.output
-    assert Recorder.called
-
-
 def test_add_user_command(runner, monkeypatch):
     class Recorder():
         called = False
@@ -49,6 +36,6 @@ def test_add_user_command(runner, monkeypatch):
     def fake_add_user(username, password):
         Recorder.called = True
 
-    monkeypatch.setattr('app.model.database.add_user', fake_add_user)
-    result = runner.invoke(args=['add-user', 'admin', '123'])
+    monkeypatch.setattr('app.commands.add_user', fake_add_user)
+    result = runner.invoke(args=['user', 'admin', '123'])
     assert Recorder.called
