@@ -1,6 +1,5 @@
 """This module contains abstract class used to implements the repositories."""
 
-from __future__ import annotations
 from abc import ABC, abstractmethod
 
 from sqlalchemy import desc

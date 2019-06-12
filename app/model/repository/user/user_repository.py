@@ -1,7 +1,6 @@
 """This module contains the abstract class used to implements user repositories."""
 
 
-from __future__ import annotations
 from abc import abstractmethod
 
 from app.model.repository.repository import Repository

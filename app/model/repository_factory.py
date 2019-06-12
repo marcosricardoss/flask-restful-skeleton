@@ -1,6 +1,5 @@
 """It contains the repository factory classes"""
 
-from __future__ import annotations
 from abc import ABC, abstractmethod
 
 from app.model.repository.repository import Repository
