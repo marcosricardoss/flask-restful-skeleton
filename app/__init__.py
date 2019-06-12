@@ -34,6 +34,7 @@ def create_app(test_config: dict = None) -> Flask:
     init_instance_folder(app)
     init_database(app)
     registes_blueprints(app)
+    init_commands(app)
 
     return app
 
@@ -98,3 +99,7 @@ def registes_blueprints(app: Flask) -> None:
     from .blueprint import index, users
     app.register_blueprint(index.bp)
     app.register_blueprint(users.bp)
+
+def init_commands(app):
+    from app.commands import register_commands
+    register_commands(app)
