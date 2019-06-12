@@ -2,10 +2,8 @@
 using the SQLAlchemy library."""
 
 
-import click
-
 from flask import Flask
-from flask.cli import with_appcontext
+from flask_migrate import Migrate
 
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
@@ -20,6 +18,9 @@ db_session = None
 def init(app: Flask) -> None:
     """This function initialize the SQLAlchemy ORM, providing a session
     and command line to create the tables in the database.
+
+    Parameters:    
+        app (flask.app.Flask): The application instance.
     """
 
     global Base, engine, db_session
@@ -38,67 +39,11 @@ def init(app: Flask) -> None:
     # attach the shutdown_session function to be execute when a request ended.
     app.teardown_appcontext(shutdown_session)
 
-    # adding the init_db_command to line command input
-    app.cli.add_command(init_db_command)
-
-    # adding the add_root_command to line command input
-    app.cli.add_command(add_user_command)
+    # Using Flask-Migrate as the handler for database migration.
+    migrate = Migrate(app, Base)
 
 
 def shutdown_session(exception=None) -> None:
     """Remove the session by send it back to the pool."""
 
     db_session.remove()
-
-
-def init_db() -> None:
-    """Import all modules here that might define models so that
-    they will be registered properly on the metadata.
-    """
-
-    import app.model.po
-    Base.metadata.create_all(bind=engine)
-
-
-def drop_db() -> None:
-    """Remove all table from database."""
-
-    db_session.remove()
-    import app.model.po
-    Base.metadata.drop_all(bind=engine)
-
-
-def add_user(username: str, password: str) -> None:
-    """This function is executed through the 'add-root' line
-    command, than it creates user into the database."""
-
-    from app.model.po import User
-    from app.model.repository_factory import UserRepositoryFactory
-    user_repository = UserRepositoryFactory().create()
-
-    user = User()
-    user.username = username
-    user.password = password
-
-    user_repository.save(user)
-
-
-@click.command('init-db')
-@with_appcontext
-def init_db_command() -> None:
-    """Creates the tables into the database."""
-
-    drop_db()
-    init_db()
-    click.echo('Initialized the database.')
-
-
-@click.command('add-user')
-@click.argument('username')
-@click.argument('password')
-@with_appcontext
-def add_user_command(username: str, password: str) -> None:
-    """Creates the tables into the database."""
-
-    add_user(username, password)
-    click.echo('User created.')
