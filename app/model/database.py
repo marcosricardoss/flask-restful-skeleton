@@ -71,5 +71,6 @@ def init_db_command() -> None:
     """This function is executed through the 'init-db' line
     commando, than it creates the tables into the database."""
 
+    drop_db()
     init_db()
     click.echo('Initialized the database.')
