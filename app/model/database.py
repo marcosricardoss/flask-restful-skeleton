@@ -78,7 +78,7 @@ def add_user(username: str, password: str) -> None:
 
     user = User()
     user.username = username
-    user.password = '123'
+    user.password = password
 
     user_repository.save(user)
 
