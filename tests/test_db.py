@@ -40,3 +40,15 @@ def test_init_db_command(runner, monkeypatch):
     result = runner.invoke(args=['init-db'])
     assert 'Initialized' in result.output
     assert Recorder.called
+
+
+def test_add_user_command(runner, monkeypatch):
+    class Recorder():
+        called = False
+
+    def fake_add_user(username, password):
+        Recorder.called = True
+
+    monkeypatch.setattr('app.model.database.add_user', fake_add_user)
+    result = runner.invoke(args=['add-user', 'admin', '123'])
+    assert Recorder.called
