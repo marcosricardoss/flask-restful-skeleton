@@ -8,7 +8,6 @@ coverage==4.5.3
 Flask==1.0.3
 Flask-HTTPAuth==3.3.0
 Flask-Migrate==2.5.2
-Flask-Script==2.0.6
 Flask-SQLAlchemy==2.4.0
 importlib-metadata==0.17
 isort==4.3.20
