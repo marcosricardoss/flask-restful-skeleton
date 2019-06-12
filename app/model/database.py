@@ -41,6 +41,9 @@ def init(app: Flask) -> None:
     # adding the init_db_command to line command input
     app.cli.add_command(init_db_command)
 
+    # adding the add_root_command to line command input
+    app.cli.add_command(add_user_command)
+
 
 def shutdown_session(exception=None) -> None:
     """Remove the session by send it back to the pool."""
@@ -65,12 +68,37 @@ def drop_db() -> None:
     Base.metadata.drop_all(bind=engine)
 
 
+def add_user(username: str, password: str) -> None:
+    """This function is executed through the 'add-root' line
+    command, than it creates user into the database."""
+
+    from app.model.po import User
+    from app.model.repository_factory import UserRepositoryFactory
+    user_repository = UserRepositoryFactory().create()
+
+    user = User()
+    user.username = username
+    user.password = '123'
+
+    user_repository.save(user)
+
+
 @click.command('init-db')
 @with_appcontext
 def init_db_command() -> None:
-    """This function is executed through the 'init-db' line
-    commando, than it creates the tables into the database."""
+    """Creates the tables into the database."""
 
     drop_db()
     init_db()
     click.echo('Initialized the database.')
+
+
+@click.command('add-user')
+@click.argument('username')
+@click.argument('password')
+@with_appcontext
+def add_user_command(username: str, password: str) -> None:
+    """Creates the tables into the database."""
+
+    add_user(username, password)
+    click.echo('User created.')
