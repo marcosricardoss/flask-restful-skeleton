@@ -38,7 +38,7 @@ def add_user(username: str, password: str) -> None:
     """
 
     from app.model.po import User
-    from app.model.repository_factory import UserRepositoryFactory
+    from app.model.factory import UserRepositoryFactory
     
     user_repository = UserRepositoryFactory().create()
     user = User(username=username, password=password)
