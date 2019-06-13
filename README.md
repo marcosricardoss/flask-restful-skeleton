@@ -80,7 +80,12 @@ The interface with the model layer is given by classes that use the **Repository
 
 ## Run The Application
 
-In order to run the application, it is necessary to have a database configured. With that done, is necessary to the passe the database URI to the application via environment variables. This **Flask HTTP REST API** skeleton comes ready to work with MySQL, PostgreSQL and SQLite databases.
+In order to run the application, it is necessary to have a database configured. With that done, is necessary to the passe the database URI to the application via environment variables. This **Flask HTTP REST API** skeleton support to work with PostgreSQL and SQLite databases.
+
+Database URLs examples:
+
+	PostgreSQL: 'postgresql+psycopg2://postgres:123@127.0.0.1:15432/olist_test'
+	SQLite: 'sqlite:////home/user/app.db'
 
 To make sure about the *dependency isolation* is recommended to use the *[venv](http://https://docs.python.org/3/library/venv.html "venv")* to create of virtual environments.
 
