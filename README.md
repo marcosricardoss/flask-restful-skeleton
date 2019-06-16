@@ -62,7 +62,7 @@ The interface with the model layer is given by classes that use the **Repository
 - **authentication:** Contains function decorators used to control the access on the API routes.
 - **handler**: Contains functions to deal with the error exceptions of API.
 - **index.py**: A blueprint to organize and group views related to the index endpoint.
-- **user.py**: A blueprint to organize and group views related  to the `/users` endpoints.
+- **user.py**: A blueprint to organize and group views related to the `/users` endpoints.
 
 **app/commands**: Package to keep the commands line.
 
@@ -80,14 +80,14 @@ The interface with the model layer is given by classes that use the **Repository
 
 ## Run The Application
 
-In order to run the application, it is necessary to have a database configured. With that done, is necessary to the passe the database URI to the application via environment variables. This **Flask HTTP REST API** skeleton support to work with PostgreSQL and SQLite databases.
+In order to run the application, it is necessary to have a database configured. With that done, is necessary to passe the database URI to the application via environment variables. This **Flask HTTP REST API** skeleton support to work with PostgreSQL and SQLite databases.
 
 Database URLs examples:
 
 	PostgreSQL: 'postgresql+psycopg2://postgres:123@127.0.0.1:15432/olist_test'
 	SQLite: 'sqlite:////home/user/app.db'
 
-To make sure about the *dependency isolation* is recommended to use the *[venv](http://https://docs.python.org/3/library/venv.html "venv")* to create of virtual environments.
+To make sure about the *dependency isolation* is recommended to use the *[venv](http://https://docs.python.org/3/library/venv.html "venv")* to create a virtual environment.
 
 After downloading the cloned open the project directory and install the dependencies with the below *pip* command: 
 
@@ -114,15 +114,15 @@ And to run the application do:
 
 `Flask run`
 
-To facilitate the development process we can use .env file to load variable to the environment. The *local.env* file, in the *app* folder, is an example for a .env file.
+To facilitate the development process we can use .env file to load variables to the environment. The *local.env* file, in the *app* folder, is an example for a .env file.
 
 **Running on Production** 
 
-In the production enviroment, you just need to set the DATABASE_URL environment variable. Then you can use the command:
+In the production environment, you just need to set the DATABASE_URL environment variable. Then you can use the command:
 
 `waitress-serve --call 'flaskr:create_app'`
 
-[Waitress](https://docs.pylonsproject.org/projects/waitress/en/stable/ "Waitress") is a the production WSGI server.
+[Waitress](https://docs.pylonsproject.org/projects/waitress/en/stable/ "Waitress") is a production WSGI server.
 
 **Running the Tests**
 
@@ -132,7 +132,7 @@ Run the test with the command:
 
 `python -m pytest`
 
-You can olso run with coverage:
+You can also run with coverage:
 
 `coverage run -m pytest`
 
@@ -161,7 +161,7 @@ You can use the Postman to try the HTTP REST API. Download
 
 [Download Postman Collections](https://www.getpostman.com/collections/f177968870d56e2828a3 "Download Postman Collections")
 
-This Postman collection collection collection was made based on:
+This Postman collection was made based on:
 
 	Host: 127.0.0.1
 	Port: 5000
