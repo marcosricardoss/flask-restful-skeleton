@@ -3,8 +3,9 @@
 
 from abc import abstractmethod
 
-from app.model.repository.repository import Repository
 from app.model.po import User
+
+from ..repository import Repository
 
 
 class UserRepository(Repository):

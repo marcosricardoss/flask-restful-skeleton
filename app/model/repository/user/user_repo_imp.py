@@ -4,7 +4,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from app.database import db_session
 from app.model.po import User
-from app.model.repository.user.user_repository import UserRepository
+
+from .user_repository import UserRepository
 
 
 class UserRepositoryImp(UserRepository):
