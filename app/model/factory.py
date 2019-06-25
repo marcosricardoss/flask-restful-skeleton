@@ -2,8 +2,8 @@
 
 from abc import ABC, abstractmethod
 
-from app.model.repository.repository import Repository
-from app.model.repository.user.user_repo_imp import UserRepositoryImp
+from .repository import Repository
+from .repository import UserRepositoryImp
 
 
 class RepositoryFactory(ABC):
