@@ -29,3 +29,6 @@ build/
 
 # visual code
 .vscode/
+
+# sqlite
+*.db
