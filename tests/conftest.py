@@ -16,14 +16,14 @@ def init_db() -> None:
     """
 
     import app.model.po
-    from app.model.database import Base, engine
+    from app.database import Base, engine
     Base.metadata.create_all(bind=engine)
 
 
 def drop_db() -> None:
     """Remove all table from database."""
 
-    from app.model.database import Base, engine
+    from app.database import Base, engine
     Base.metadata.drop_all(bind=engine)
 
 
@@ -89,7 +89,7 @@ def session(app, request):
         db_session: a SLQAlchmey Session object.
     """
 
-    from app.model.database import db_session
+    from app.database import db_session
 
     def teardown():
         db_session.remove()
@@ -128,7 +128,7 @@ def auth(app, request):
     import base64
     from app.model.po import User
     from werkzeug.security import generate_password_hash
-    from app.model.database import db_session
+    from app.database import db_session
 
     user = db_session.query(User).filter_by(username='test').first()
 
