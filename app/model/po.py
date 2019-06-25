@@ -8,7 +8,7 @@ that is in the same class.
 from abc import abstractmethod
 
 from sqlalchemy import Column, Integer, String
-from app.model.database import Base
+from app.database import Base
 
 
 class Model:

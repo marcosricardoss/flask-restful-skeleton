@@ -82,8 +82,8 @@ def init_database(app) -> None:
         app (flask.app.Flask): The application instance Flask that'll be running
     """
 
-    from .model import database
-    database.init(app)
+    from .database import init
+    init(app)
 
 
 def init_blueprints(app: Flask) -> None:
