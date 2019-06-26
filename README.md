@@ -82,7 +82,8 @@ The interface with the model layer is given by classes that use the **Repository
 
 The following steps are required to run the application
 
-**Configure The Database**
+
+### Configure The Database
 
 This **Flask HTTP REST API** skeleton support to work with PostgreSQL and SQLite databases. With the database configured, you need to make the database URI containing the database credentials to access it. This URI will be set later for application through environment variables.
 
@@ -92,7 +93,7 @@ Database URIs examples:
 	SQLite: sqlite:////home/user/app.db
 
 
-**Install The Dependencies**
+### Install The Dependencies
 
 To make sure about the *[dependency isolation](https://12factor.net/dependencies "dependency isolation")* is recommended to use the *[venv](http://https://docs.python.org/3/library/venv.html "venv")* to create a virtual environment.
 
@@ -100,7 +101,8 @@ After downloading or cloned this repository, open the project directory and inst
 
 `pip install -r requirements.txt`
 
-**Setting The Environment Variables**
+
+### Setting The Environment Variables
 
 To execute the application, do database migrations or performing any other command, it is necessary to configure two environment variables: FLASK_ENV and DATABASE_URL. These variables inform the Flask what is the environment of execution and the URI to access the database.
 
@@ -111,7 +113,8 @@ In Linux or Unix-like, this command will look like this:
 
 The FLASK_ENV is a Flask environment variable using to configure the flask execution.  In this **Flask HTTP REST API** skeleton it is used to load the right database URI for the environment specified (development or production). **If FLASK_ENV it not informed the flask will run in production mode.**
 
-**Perform Database Migration**
+
+### Perform Database Migration
 
 You can do the database migrations with the following commands:
 
@@ -121,9 +124,12 @@ You can do the database migrations with the following commands:
 
 Note: This will create the *migrations* folder to the application. The contents of this folder need to be added to version control along with your other source files.
 
-**Running as development mode**
 
-In development, you can use the built-in development server with the 'flask run' command. Remember to set the environment and the database URI:
+### Running
+
+**Development**
+
+In development, you can use the built-in development server with the `flask run` command. Remember to set the environment and the database URI:
 
 `export FLASK_ENV=development`
 `export DATABASE_URL=postgresql+psycopg2://postgres:password@127.0.0.1:15432/database_name`
@@ -131,7 +137,7 @@ In development, you can use the built-in development server with the 'flask run'
 
 For a smoother work-flow on development, you can use a .env file to load the database URI. The *local.env* file, in the *app* folder, is an example of use to .env file.
 
-**Running on Production** 
+**Production** 
 
 In the production environment, you just need to set the DATABASE_URL environment variable. Then you can use the command:
 
@@ -139,7 +145,7 @@ In the production environment, you just need to set the DATABASE_URL environment
 
 [Waitress](https://docs.pylonsproject.org/projects/waitress/en/stable/ "Waitress") is the production WSGI server used for this project.
 
-**Running the Tests**
+**Tests**
 
 To run the test, you need to set the DATABASE_URL environment variable too. Like in development, you can use a test/.env to set the DATABASE_URL variable.
 
@@ -151,7 +157,16 @@ You can also run with coverage:
 
 `coverage run -m pytest`
 
-**Deploying to Heroku**
+
+## Configuring the Secret Key
+
+The secret key is kept in the config.py module at the root of the application. Edit the `SECRET_KEY` class variable of the Production class with some random bytes. You can use the following command to output a random secret key:
+
+	python -c 'import os; print(os.urandom(16))'
+	b'_5#y2L"F4Q8z\n\xec]/'
+
+
+## Deploying to Heroku
 
 The application is ready to deploy in Heroku, being only necessary to create an application and a database in the Heroku platform.
 
