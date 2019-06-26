@@ -131,8 +131,8 @@ Note: This will create the *migrations* folder to the application. The contents 
 
 In development, you can use the built-in development server with the `flask run` command. Remember to set the environment and the database URI:
 
-`export FLASK_ENV=development`
-`export DATABASE_URL=postgresql+psycopg2://postgres:password@127.0.0.1:15432/database_name`
+`export FLASK_ENV=development`<br>
+`export DATABASE_URL=postgresql+psycopg2://postgres:password@127.0.0.1:15432/database_name`<br>
 `Flask run`
 
 For a smoother work-flow on development, you can use a .env file to load the database URI. The *local.env* file, in the *app* folder, is an example of use to .env file.
@@ -141,7 +141,7 @@ For a smoother work-flow on development, you can use a .env file to load the dat
 
 In the production environment, you just need to set the DATABASE_URL environment variable. Then you can use the command:
 
-`waitress-serve --call 'flaskr:create_app'`
+`waitress-serve --call 'app:create_app'`
 
 [Waitress](https://docs.pylonsproject.org/projects/waitress/en/stable/ "Waitress") is the production WSGI server used for this project.
 
