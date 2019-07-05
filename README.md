@@ -36,7 +36,7 @@ The interface with the model layer is given by classes that use the **Repository
 	   ├── __init__.py
 	   ├── local.env
 	   └── model
-	       ├── po.py
+	       ├── models.py
 	       ├── repository.py
 	       └── user_repository.py
 
@@ -55,9 +55,11 @@ The interface with the model layer is given by classes that use the **Repository
 
 **app/__init__.py**: Contains the factory function 'create_app' that is responsible for initializing the application according to a previous configuration.
 
+**app/local.env**: A sample of the *.env* config file..
+
 **app/model**: The *model* layer.
 
-- **po.py**: *Persistent* objects of the SQLAlchemy, also known as *Model*.
+- **models.py**: Persistent objects of the SQLAlchemy.
 - **repository.py**: Contains Repository generic class.
 - **user_repository.py**: Contains UserRepository class.
 
