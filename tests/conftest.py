@@ -15,7 +15,7 @@ def init_db() -> None:
     they will be registered properly on the metadata.
     """
 
-    import app.model.po
+    import app.model.models
     from app.database import Base, engine
     Base.metadata.create_all(bind=engine)
 
@@ -126,7 +126,7 @@ def auth(app, request):
     """
 
     import base64
-    from app.model.po import User
+    from app.model import User
     from werkzeug.security import generate_password_hash
     from app.database import db_session
 

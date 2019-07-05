@@ -19,7 +19,7 @@ def test_session_is_open(app):
 def test_session_is_close(app):
     with app.app_context():
         from app.database import db_session
-        from app.model.po import User
+        from app.model.models import User
 
         assert db_session()._is_clean()
         db_session.add(User())
