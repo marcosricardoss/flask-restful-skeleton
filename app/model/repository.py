@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod
 from sqlalchemy import desc
 
 from app.database import db_session
-from app.model.po import Model
+from .models import Model
 
 
 class Repository(ABC):
