@@ -2,12 +2,12 @@
 
 
 from flask_httpauth import HTTPBasicAuth
-from app.model import UserRepositoryFactory
+from app.model import UserRepository
 from flask import make_response, jsonify
 
 
 auth = HTTPBasicAuth()
-user_repository = UserRepositoryFactory().create()
+user_repository = UserRepository()
 
 
 @auth.verify_password

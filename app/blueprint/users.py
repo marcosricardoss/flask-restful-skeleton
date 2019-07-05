@@ -5,7 +5,7 @@ group, views related to the '/users' endpoint of HTTP REST API.
 from flask import abort, Blueprint, request, Response, make_response, jsonify
 
 from app.model import User
-from app.model import UserRepositoryFactory
+from app.model import UserRepository
 from app.blueprint.authentication import auth
 
 
@@ -25,7 +25,7 @@ def get_user(user_id: int) -> Response:
         response: flask.Response object with the application/json mimetype.
     """
 
-    user_repository = UserRepositoryFactory().create()
+    user_repository = UserRepository()
     user = user_repository.get(user_id)
 
     if user:
@@ -50,7 +50,7 @@ def get_user_by_username(username: str) -> Response:
         response: flask.Response object with the application/json mimetype.
     """
 
-    user_repository = UserRepositoryFactory().create()
+    user_repository = UserRepository()
     user = user_repository.get_by_username(username)
 
     if user:
@@ -72,7 +72,7 @@ def get_users() -> Response:
         response: flask.Response object with the application/json mimetype.
     """
 
-    user_repository = UserRepositoryFactory().create()
+    user_repository = UserRepository()
     users = user_repository.get_all()
 
     data = [i.serialize() for i in users]
@@ -93,7 +93,7 @@ def register() -> Response:
         response: flask.Response object with the application/json mimetype.
     """
 
-    user_repository = UserRepositoryFactory().create()
+    user_repository = UserRepository()
 
     # creating a User object
     user = User()
@@ -130,7 +130,7 @@ def update(user_id: int) -> Response:
         response: flask.Response object with the application/json mimetype.
     """
 
-    user_repository = UserRepositoryFactory().create()
+    user_repository = UserRepository()
     user = user_repository.get(user_id)
 
     if not user:
@@ -170,7 +170,7 @@ def patch(user_id: int) -> Response:
         response: flask.Response object with the application/json mimetype.
     """
 
-    user_repository = UserRepositoryFactory().create()
+    user_repository = UserRepository()
     user = user_repository.get(user_id)
 
     if not user:
@@ -210,7 +210,7 @@ def delete(user_id: int) -> Response:
         response: flask.Response object with the application/json mimetype.
     """
 
-    user_repository = UserRepositoryFactory().create()
+    user_repository = UserRepository()
     user = user_repository.get(user_id)
     if user:
         user_repository.delete(user)

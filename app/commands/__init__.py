@@ -38,9 +38,9 @@ def add_user(username: str, password: str) -> None:
     """
 
     from app.model import User
-    from app.model import UserRepositoryFactory
+    from app.model import UserRepository
     
-    user_repository = UserRepositoryFactory().create()
+    user_repository = UserRepository()
     user = User(username=username, password=password)
 
     is_invalid = user_repository.is_invalid(user)

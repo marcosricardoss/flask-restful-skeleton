@@ -1,21 +1,20 @@
-"""This module contains a concrete class of the UserRepository abstract class."""
+"""It contains UserRepository class."""
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from app.database import db_session
 from app.model.po import User
 
-from .user_repository import UserRepository
+from .repository import Repository
 
 
-class UserRepositoryImp(UserRepository):
-    """This class implements the UserRepository abstract class.
-    Contains specific method related to de User model to
-    do operation in the dabase.
+class UserRepository(Repository):
+    """It Contains specific method related to de User
+    model to do operation in the dabase.
     """
 
     def __init__(self):
-        UserRepository.__init__(self, User)
+        Repository.__init__(self, User)
 
     def get_by_username(self, username: str) -> User:
         """Retrive a users from database by its username.

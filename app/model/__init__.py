@@ -2,6 +2,6 @@
 
 
 from .po import User
-from .factory import UserRepositoryFactory
+from .user_repository import UserRepository
 
-__all__ = ["User", "UserRepositoryFactory"]
+__all__ = ["User", "UserRepository"]

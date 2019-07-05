@@ -1,4 +1,4 @@
-"""This module contains abstract class used to implements the repositories."""
+"""It contains Repository generic class."""
 
 from abc import ABC, abstractmethod
 
@@ -9,9 +9,9 @@ from app.model.po import Model
 
 
 class Repository(ABC):
-    """The Repository abstract class declares the abstract methods to do operations in the
-    database. The Repository's subclasses can provide the implementation
-    of these methods.
+    """This class implements the common methods used
+    for all specific repositories classes. The subclasses
+    of it can provide the implementation of these methods.
     """
 
     def __init__(self, model_class):
