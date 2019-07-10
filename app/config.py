@@ -15,6 +15,8 @@ class Default():
         before and after changes are committed to the database.
     """
 
+    JWT_BLACKLIST_ENABLED = True
+    JWT_BLACKLIST_TOKEN_CHECKS = ['access', 'refresh']
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
@@ -29,6 +31,7 @@ class Production(Default):
     """
 
     SECRET_KEY = b'\xacP=\x12\xa6\xa2\x19`\xbcu{\x0b\xe4&H\x8d'
+    JWT_SECRET_KEY = b'\xacP=\x12\xa6\xa2\x19`\xbcu{\x0b\xe4&H\x8d'
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
 
 
@@ -46,4 +49,5 @@ class Development(Default):
     load_dotenv()  # loading .env
 
     SECRET_KEY = 'dev'
+    JWT_SECRET_KEY = 'dev'
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')

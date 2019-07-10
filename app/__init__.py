@@ -15,7 +15,7 @@ to a previous configuration.
 import os
 
 from flask import Flask
-
+from flask_jwt_extended import JWTManager
 
 def create_app(test_config: dict = None) -> Flask:
     """This function is responsible to create a Flask instance according
@@ -29,7 +29,7 @@ def create_app(test_config: dict = None) -> Flask:
         flask.app.Flask: The application instance
     """
 
-    app = Flask(__name__, instance_relative_config=True)
+    app = Flask(__name__, instance_relative_config=True)    
     
     load_config(app, test_config)
     
@@ -37,6 +37,7 @@ def create_app(test_config: dict = None) -> Flask:
     init_database(app)
     init_blueprints(app)
     init_commands(app)
+    init_jwt_manager(app)    
 
     return app
 
@@ -98,10 +99,16 @@ def init_blueprints(app: Flask) -> None:
     register_handler(app)
 
     # error Handlers
-    from .blueprint import index, users
+    from .blueprint import index, users, auth
     app.register_blueprint(index.bp)
     app.register_blueprint(users.bp)
+    app.register_blueprint(auth.bp)
 
 def init_commands(app):
     from app.commands import register_commands
     register_commands(app)
+
+def init_jwt_manager(app):
+    from .authentication import init
+    jwt = JWTManager(app)
+    init(jwt)
