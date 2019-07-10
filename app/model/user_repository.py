@@ -61,7 +61,7 @@ class UserRepository(Repository):
 
         user = self.get_by_username(username)
         if user and check_password_hash(user.password, password):
-            return True
+            return user
 
         return False
 
