@@ -165,8 +165,8 @@ def auth(app, request):
     token_repository.save(refresh_token_encoded, app.config["JWT_IDENTITY_CLAIM"])
 
     headers = {
-        'access': {'Authorization': 'Bearer ' + access_token_encoded},
-        'refresh': {'Authorization': 'Bearer ' + refresh_token_encoded},
+        'access_token': {'Authorization': 'Bearer ' + access_token_encoded},
+        'refresh_token': {'Authorization': 'Bearer ' + refresh_token_encoded},
     }        
 
     return headers

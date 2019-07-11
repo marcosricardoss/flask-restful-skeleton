@@ -5,7 +5,7 @@ from flask_jwt_extended import decode_token
 def test_auth_refresh_a_valid_token_returning_200_status_code(client, session, auth):
     response = client.post('/auth/refresh',
                            content_type='application/json',
-                           headers=auth['refresh'])
+                           headers=auth['refresh_token'])
     assert response.status_code == 200
     assert response.json['status'] == 'success'
     

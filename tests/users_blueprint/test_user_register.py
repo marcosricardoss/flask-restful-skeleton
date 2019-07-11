@@ -10,7 +10,7 @@ def test_user_register_with_data_well_formatted_returning_200_status_code(client
     response = client.post('/users',
                            data=json.dumps(data),
                            content_type='application/json',
-                           headers=auth['access'])
+                           headers=auth['access_token'])
     assert response.status_code == 200
     assert response.json['status'] == 'success'
     assert response.json['data']['username'] == data['username']
@@ -18,13 +18,13 @@ def test_user_register_with_data_well_formatted_returning_200_status_code(client
 
 def test_user_register_without_data_returning_400_status_code(client, auth):
     response = client.post(
-        '/users', content_type='application/json', headers=auth['access'])
+        '/users', content_type='application/json', headers=auth['access_token'])
     assert response.status_code == 400
 
 
 def test_user_register_without_empty_data_returning_400_status_code(client, auth):
     response = client.post(
-        '/users', data={}, content_type='application/json', headers=auth['access'])
+        '/users', data={}, content_type='application/json', headers=auth['access_token'])
     assert response.status_code == 400
 
 
@@ -33,7 +33,7 @@ def test_user_register_with_empty_data_returning_400_status_code(client, auth):
     response = client.post('/users',
                            data=json.dumps(data),
                            content_type='application/json',
-                           headers=auth['access'])
+                           headers=auth['access_token'])
     assert response.status_code == 400
     assert response.json['status'] == 'fail'
     assert {'username': 'must be filled'} in response.json['data']
@@ -45,7 +45,7 @@ def test_user_register_without_username_returning_400_status_code(client, auth):
     response = client.post('/users',
                            data=json.dumps(data),
                            content_type='application/json',
-                           headers=auth['access'])
+                           headers=auth['access_token'])
     assert response.status_code == 400
     assert response.json['status'] == 'fail'
     assert {'username': 'must be filled'} in response.json['data']
@@ -57,7 +57,7 @@ def test_user_register_without_password_returning_400_status_code(client, auth):
     response = client.post('/users',
                            data=json.dumps(data),
                            content_type='application/json',
-                           headers=auth['access'])
+                           headers=auth['access_token'])
     assert response.status_code == 400
     assert response.json['status'] == 'fail'
     assert not {'username': 'must be filled'} in response.json['data']
@@ -70,7 +70,7 @@ def test_user_register_with_a_existent_username_returning_400_status_code(client
     response = client.post('/users',
                            data=json.dumps(data),
                            content_type='application/json',
-                           headers=auth['access'])
+                           headers=auth['access_token'])
     assert response.status_code == 400
     assert response.json['status'] == 'fail'
     assert {'username': 'is already in use.'} in response.json['data']

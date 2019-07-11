@@ -7,14 +7,14 @@ from ..util import create_user, get_unique_username, get_unique_id, get_users_co
 def test_user_retrieve_with_existent_user_id_returning_200_status_code(client, session, auth):
     user = create_user(session)
     endpoint = '/users/{}'.format(user.id)
-    response = client.get(endpoint, headers=auth['access'])
+    response = client.get(endpoint, headers=auth['access_token'])
     assert response.status_code == 200
 
 
 def test_user_retrieve_with_existent_username_returning_200_status_code(client, session, auth):
     user = create_user(session)
     endpoint = '/users/{}'.format(user.username)
-    response = client.get(endpoint, headers=auth['access'])
+    response = client.get(endpoint, headers=auth['access_token'])
     assert response.status_code == 200
 
 
@@ -24,7 +24,7 @@ def test_user_retrieve_user_list_200_status_code(client, session, auth):
     users_count = get_users_count(session)
 
     endpoint = '/users'
-    response = client.get(endpoint, headers=auth['access'])
+    response = client.get(endpoint, headers=auth['access_token'])
 
     assert response.status_code == 200
     assert response.json['status'] == 'success'
@@ -37,11 +37,11 @@ def test_user_retrieve_user_list_200_status_code(client, session, auth):
 
 def test_user_retrieve_with_inexistent_user_id_returning_404_status_code(client, auth):
     endpoint = '/users/{}'.format(get_unique_id)
-    response = client.get(endpoint, headers=auth['access'])
+    response = client.get(endpoint, headers=auth['access_token'])
     assert response.status_code == 404
 
 
 def test_user_retrieve_with_inexistent_username_returning_404_status_code(client, auth):
     endpoint = '/users/{}'.format(get_unique_username)
-    response = client.get(endpoint, headers=auth['access'])
+    response = client.get(endpoint, headers=auth['access_token'])
     assert response.status_code == 404
