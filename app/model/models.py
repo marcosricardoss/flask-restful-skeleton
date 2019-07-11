@@ -116,8 +116,8 @@ class Token(Base, Model):
         self.jti = jti
         self.token_type = token_type
         self.user_identity = user_identity
-        self.token_type = revoked
-        self.token_type = expires
+        self.revoked = revoked
+        self.expires = expires
 
     def serialize(self) -> dict:
         """Serialize the object attributes values into a dictionary.
