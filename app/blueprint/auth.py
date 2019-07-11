@@ -3,13 +3,13 @@ to the '/auth' endpoint of HTTP REST API.
 """
 
 from flask import (
-    abort, Blueprint, request, Response, make_response, jsonify
+    current_app, abort, Blueprint, request, Response, make_response, jsonify
 )
 from flask_jwt_extended import (
     jwt_required, create_access_token, create_refresh_token, jwt_required, get_raw_jwt
 )
-from app.model import User
-from app.model import UserRepository
+from app.model import User, Token
+from app.model import UserRepository, TokenRepository
 
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
@@ -39,13 +39,18 @@ def login() -> Response:
         }), 401)
 
     else:
-        access_token = create_access_token(identity=user.username)
-        refresh_token = create_refresh_token(identity=user.username)
+        access_token_encoded = create_access_token(identity=user.username)
+        refresh_token_encoded = create_refresh_token(identity=user.username)
+
+        token_repository = TokenRepository()
+        token_repository.save(access_token_encoded, current_app.config["JWT_IDENTITY_CLAIM"])
+        token_repository.save(refresh_token_encoded, current_app.config["JWT_IDENTITY_CLAIM"])
+
         response = make_response(jsonify({
             'status': 'success',
             'data': {
-                'access_token': access_token,
-                'refresh_token': refresh_token
+                'access_token': access_token_encoded,
+                'refresh_token': refresh_token_encoded
             }
         }), 200)
 
