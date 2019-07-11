@@ -28,11 +28,7 @@ def drop_db() -> None:
 
 
 def create_test_user() -> None:
-    """Creates test user.   
-
-    Returns:
-       user: An object of the User model
-    """
+    """Creates test user."""
 
     from app.model import User
     from werkzeug.security import generate_password_hash
