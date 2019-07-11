@@ -16,7 +16,6 @@ class TokenRepository(Repository):
       Repository.__init__(self, Token)
 
    def save(self, encoded_token, identity_claim=None):
-      print(identity_claim)
       """Adds a new token to the database. It is not revoked when it is added.
 
       Parameters:
