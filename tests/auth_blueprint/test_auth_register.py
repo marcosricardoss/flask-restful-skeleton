@@ -20,11 +20,6 @@ def test_auth_register_without_data_returning_400_status_code(client):
     assert response.status_code == 400
 
 
-def test_auth_register_without_empty_data_returning_400_status_code(client):
-    response = client.post('/auth/register', data={}, content_type='application/json')
-    assert response.status_code == 400
-
-
 def test_auth_register_with_empty_data_returning_400_status_code(client):
     data = {}
     response = client.post('/auth/register',
