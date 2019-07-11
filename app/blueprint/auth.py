@@ -6,7 +6,8 @@ from flask import (
     current_app, abort, Blueprint, request, Response, make_response, jsonify
 )
 from flask_jwt_extended import (
-    jwt_required, create_access_token, create_refresh_token, jwt_required, get_raw_jwt
+    jwt_required, create_access_token, create_refresh_token, jwt_required, get_raw_jwt,
+    jwt_refresh_token_required, get_jwt_identity
 )
 from app.model import User, Token
 from app.model import UserRepository, TokenRepository
@@ -55,6 +56,21 @@ def login() -> Response:
         }), 200)
 
     return response
+
+
+@bp.route('/refresh', methods=['POST'])
+@jwt_refresh_token_required
+def refresh():
+    current_user = get_jwt_identity()
+    access_token_encoded = create_access_token(identity=current_user)
+    
+    token_repository = TokenRepository()
+    token_repository.save(access_token_encoded, current_app.config["JWT_IDENTITY_CLAIM"])
+    
+    return make_response(jsonify({
+        'status': 'success',
+        'data': {'access_token': access_token_encoded}
+    }), 200)
 
 
 @bp.route('/logout', methods=('POST',))
