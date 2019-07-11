@@ -64,7 +64,7 @@ def test_auth_login_without_password_returning_400_status_code(client):
     assert response.json['status'] == 'fail'
 
 
-def test_auth_login_with_an_inexistent_username_returning_400_status_code(client):
+def test_auth_login_with_an_inexistent_username_returning_401_status_code(client):
     data = {'username': 'xtestx', 'password': "test"}
     response = client.post('/auth/login',
                            data=json.dumps(data),
@@ -74,7 +74,7 @@ def test_auth_login_with_an_inexistent_username_returning_400_status_code(client
     assert response.json['message'] == 'Username or Password not valid'
 
 
-def test_auth_login_with_an_incorrect_password_username_returning_400_status_code(client):
+def test_auth_login_with_an_incorrect_password_username_returning_401_status_code(client):
     data = {'username': 'test', 'password': "xtestx"}
     response = client.post('/auth/login',
                            data=json.dumps(data),
