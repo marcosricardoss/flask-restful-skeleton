@@ -44,7 +44,11 @@ def app(request):
     # app instance
     app = create_app({
         'TESTING': True,
-        'SQLALCHEMY_DATABASE_URI': os.environ.get('DATABASE_URL')
+        'SQLALCHEMY_DATABASE_URI': os.environ.get('DATABASE_URL'),
+        'JWT_BLACKLIST_ENABLED': True,
+        'JWT_BLACKLIST_TOKEN_CHECKS': ['access', 'refresh'],
+        'SECRET_KEY': 'dev',
+        'JWT_SECRET_KEY': 'dev'
     })
 
     # add to the scope
@@ -144,3 +148,32 @@ def auth(app, request):
     headers = {'Authorization': 'Basic ' + encoded}
 
     return headers
+
+
+@pytest.fixture
+def user(app, request):
+     """Creates HTTP authorization header for a basic authentication.
+
+    Parameters:    
+        app (flask.app.Flask): The application instance.
+        request (FixtureRequest): A request for a fixture from a test or fixture function
+
+    Returns:
+       user: An object of the User model
+    """
+
+    from app.model import User
+    from werkzeug.security import generate_password_hash
+    from app.database import db_session
+
+    user = db_session.query(User).filter_by(username='test').first()
+
+    if not user:
+        user = User()
+        user.username = 'test'
+        user.password = generate_password_hash('test')
+
+        db_session.add(user)
+        db_session.commit()
+
+    return user
