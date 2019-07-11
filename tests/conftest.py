@@ -27,6 +27,28 @@ def drop_db() -> None:
     Base.metadata.drop_all(bind=engine)
 
 
+def create_test_user() -> None:
+    """Creates test user.   
+
+    Returns:
+       user: An object of the User model
+    """
+
+    from app.model import User
+    from werkzeug.security import generate_password_hash
+    from app.database import db_session
+
+    user = db_session.query(User).filter_by(username='test').first()
+
+    if not user:
+        user = User()
+        user.username = 'test'
+        user.password = generate_password_hash('test')
+
+        db_session.add(user)
+        db_session.commit()
+
+
 @pytest.fixture
 def app(request):
     """ Create a application instance from given settings.
@@ -61,6 +83,7 @@ def app(request):
         ctx.pop()
 
     init_db()
+    create_test_user()
 
     request.addfinalizer(teardown)
     return app
@@ -148,32 +171,3 @@ def auth(app, request):
     headers = {'Authorization': 'Basic ' + encoded}
 
     return headers
-
-
-@pytest.fixture
-def user(app, request):
-    """Creates HTTP authorization header for a basic authentication.
-
-    Parameters:    
-        app (flask.app.Flask): The application instance.
-        request (FixtureRequest): A request for a fixture from a test or fixture function
-
-    Returns:
-       user: An object of the User model
-    """
-
-    from app.model import User
-    from werkzeug.security import generate_password_hash
-    from app.database import db_session
-
-    user = db_session.query(User).filter_by(username='test').first()
-
-    if not user:
-        user = User()
-        user.username = 'test'
-        user.password = generate_password_hash('test')
-
-        db_session.add(user)
-        db_session.commit()
-
-    return user

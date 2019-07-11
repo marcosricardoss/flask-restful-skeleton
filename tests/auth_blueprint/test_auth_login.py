@@ -7,7 +7,7 @@ from flask_jwt_extended import decode_token
 from ..util import get_unique_username, create_user
 
 
-def test_auth_login_with_correct_credentials_passed_returning_200_status_code(client, user, session):
+def test_auth_login_with_correct_credentials_passed_returning_200_status_code(client, session):
     data = {'username': 'test', 'password': 'test'}
     response = client.post('/auth/login',
                            data=json.dumps(data),
@@ -72,7 +72,7 @@ def test_auth_login_with_an_inexistent_username_returning_400_status_code(client
     assert response.status_code == 401
     assert response.json['status'] == 'fail'
     assert response.json['message'] == 'Username or Password not valid'
-    
+
 
 def test_auth_login_with_an_incorrect_password_username_returning_400_status_code(client):
     data = {'username': 'test', 'password': "xtestx"}
