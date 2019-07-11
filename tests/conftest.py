@@ -152,7 +152,7 @@ def auth(app, request):
 
 @pytest.fixture
 def user(app, request):
-     """Creates HTTP authorization header for a basic authentication.
+    """Creates HTTP authorization header for a basic authentication.
 
     Parameters:    
         app (flask.app.Flask): The application instance.
