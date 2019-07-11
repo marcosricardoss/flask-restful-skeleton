@@ -16,7 +16,7 @@ def test_acces_an_inexistent_url_returning_404_status_code(client):
 
 def test_to_access_a_protected_url_returning_200_status_code(client, auth):
     endpoint = '/users'
-    response = client.get(endpoint, headers=auth)
+    response = client.get(endpoint, headers=auth['access'])
     assert response.status_code == 200
 
 
