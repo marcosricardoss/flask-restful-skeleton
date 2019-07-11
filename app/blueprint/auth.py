@@ -6,7 +6,7 @@ from flask import (
     abort, Blueprint, request, Response, make_response, jsonify
 )
 from flask_jwt_extended import (
-    jwt_required, create_access_token, jwt_required, get_raw_jwt
+    jwt_required, create_access_token, create_refresh_token, jwt_required, get_raw_jwt
 )
 from app.model import User
 from app.model import UserRepository
@@ -39,10 +39,14 @@ def login() -> Response:
         }), 401)
 
     else:
-        token = create_access_token(identity=user.username)
+        access_token = create_access_token(identity=user.username)
+        refresh_token = create_refresh_token(identity=user.username)
         response = make_response(jsonify({
             'status': 'success',
-            'data': {'token': token}
+            'data': {
+                'access_token': access_token,
+                'refresh_token': refresh_token
+            }
         }), 200)
 
     return response
