@@ -142,7 +142,7 @@ def runner(app):
 
 @pytest.fixture
 def auth(app, request):
-    """Creates HTTP authorization header for a basic authentication.
+    """Creates HTTP authorization header.
 
     Parameters:    
         app (flask.app.Flask): The application instance.
@@ -152,22 +152,21 @@ def auth(app, request):
        headers: a dictionary with HTTP authorization header for a basic authentication
     """
 
-    import base64
-    from app.model import User
-    from werkzeug.security import generate_password_hash
-    from app.database import db_session
+    from flask_jwt_extended import (
+        jwt_required, create_access_token, create_refresh_token
+    )
+    from app.model import TokenRepository
 
-    user = db_session.query(User).filter_by(username='test').first()
+    access_token_encoded = create_access_token(identity='test')
+    refresh_token_encoded = create_refresh_token(identity='test')
 
-    if not user:
-        user = User()
-        user.username = 'test'
-        user.password = generate_password_hash('test')
+    token_repository = TokenRepository()
+    token_repository.save(access_token_encoded, app.config["JWT_IDENTITY_CLAIM"])
+    token_repository.save(refresh_token_encoded, app.config["JWT_IDENTITY_CLAIM"])
 
-        db_session.add(user)
-        db_session.commit()
-
-    encoded = base64.b64encode(b'test:test').decode('utf-8')
-    headers = {'Authorization': 'Basic ' + encoded}
+    headers = {
+        'access': {'Authorization': 'Bearer ' + access_token_encoded},
+        'refresh': {'Authorization': 'Bearer ' + refresh_token_encoded},
+    }        
 
     return headers
