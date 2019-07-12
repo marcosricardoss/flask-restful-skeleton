@@ -19,7 +19,6 @@ Mako==1.0.12
 MarkupSafe==1.1.1
 mccabe==0.6.1
 more-itertools==7.0.0
-pkg-resources==0.0.0
 pluggy==0.12.0
 psycopg2-binary==2.8.2
 py==1.8.0
