@@ -81,6 +81,9 @@ def register() -> Response:
         response: flask.Response object with the application/json mimetype.
     """
 
+    if not request.is_json:
+        abort(400)
+
     user_repository = UserRepository()
 
     # creating a User object
@@ -105,7 +108,7 @@ def register() -> Response:
     return response
 
 
-@bp.route('/token', methods=['GET'])
+@bp.route('/token', methods=('GET',))
 @jwt_required
 def get_tokens():
     user_identity = get_jwt_identity()
@@ -119,7 +122,7 @@ def get_tokens():
     }), 200)
 
 
-@bp.route('/token/<int:token_id>', methods=['PUT'])
+@bp.route('/token/<int:token_id>', methods=('PUT',))
 @jwt_required
 def modify_token(token_id:int):
     # Get and verify the desired revoked status from the body    
