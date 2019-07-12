@@ -13,7 +13,7 @@ Use this skeleton application to quickly setup and start to create a Flask HTTP 
 - SOLID design principles
 - PEP-8 for code style
 - Heroku deployable
-
+- JWT authentication
 
 ## Strategy
 
@@ -25,14 +25,16 @@ The interface with the model layer is given by classes that use the **Repository
 ## Project layout
 	.
 	└── app
+	   ├── authentication
 	   ├── blueprint
-	   │   ├── authentication
 	   │   ├── handler
+	   │   ├── auth.py
 	   │   ├── index.py
 	   │   └── users.py
 	   ├── commands
 	   ├── config.py
 	   ├── database.py
+	   ├── exceptions.py
 	   ├── __init__.py
 	   ├── local.env
 	   └── model
@@ -40,10 +42,12 @@ The interface with the model layer is given by classes that use the **Repository
 	       ├── repository.py
 	       └── user_repository.py
 
+**app/authentication:** Contains function decorators used to control JWT tokens authentication.
+
 **app/blueprint**: The *controller* layer.
 
-- **authentication:** Contains function decorators used to control the access on the API routes.
 - **handler**: Contains functions to deal with the error exceptions of API.
+- **auth.py**: A blueprint to organize and group views related to the `/auth` endpoints.
 - **index.py**: A blueprint to organize and group views related to the index endpoint.
 - **user.py**: A blueprint to organize and group views related to the `/users` endpoints.
 
@@ -52,6 +56,8 @@ The interface with the model layer is given by classes that use the **Repository
 **app/config.py**: Keeps the settings classes that are loading according to the running environment.
 
 **app/database.py:**: The database bootstrapper.
+
+**app/exceptions.py:**: Custom exceptions.
 
 **app/__init__.py**: Contains the factory function 'create_app' that is responsible for initializing the application according to a previous configuration.
 
@@ -180,14 +186,12 @@ This Postman collection was made based on:
 
 	Host: 127.0.0.1
 	Port: 5000
-	User: demo (Base Auth)
-	password: demo (Base Auth)
 
-To create the new user, use `user` command:
+**Note: To access a protected view, all we have to do is send in the JWT with the request. By default, this is done with an authorization header that looks like::**
 
-`flask user demo demo`
+	Authorization: Bearer <access_token>
 
-
+	
 ## Contributing
 
 Whether reporting bugs, discussing improvements and new ideas or writing extensions: Contributions are welcome! Here's how to get started:
