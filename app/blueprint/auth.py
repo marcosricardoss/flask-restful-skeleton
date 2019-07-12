@@ -32,7 +32,6 @@ def login() -> Response:
 
     # authenticating the user
     user = UserRepository().authenticate(data.get('username'), data.get('password'))
-    print(user)
     if not user:
         response = make_response(jsonify({
             'status': 'fail',
@@ -121,3 +120,17 @@ def register() -> Response:
         }), 400)
 
     return response
+
+
+@bp.route('/token', methods=['GET'])
+@jwt_required
+def get_tokens():
+    user_identity = get_jwt_identity()
+    tokens = TokenRepository().get_user_tokens(user_identity)    
+
+    data = [i.serialize() for i in tokens]
+    
+    return make_response(jsonify({
+        'status': 'success',
+        'data': data
+    }), 200)

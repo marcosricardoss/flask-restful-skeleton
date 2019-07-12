@@ -15,12 +15,25 @@ class TokenRepository(Repository):
    def __init__(self):
       Repository.__init__(self, Token)
 
-   def save(self, encoded_token, identity_claim=None):
+   def get_user_tokens(self, user_identity:str) -> list:
+      """Returns all of the tokens, revoked and unrevoked, 
+      that are stored for the given user.
+
+      Parameters:
+         identity_claim (str): The key of the identity claim in the decoded token dictionary.
+
+      Returns:
+         list: A token list of a user.
+      """
+
+      return db_session.query(Token).filter_by(user_identity=user_identity).all()
+
+   def save(self, encoded_token:str, identity_claim:str=None) -> None:
       """Adds a new token to the database. It is not revoked when it is added.
 
       Parameters:
-            encoded_token (): The encoded JWT token.
-            identity_claim (): The key of the identity claim in the decoded token dictionary.
+         encoded_token (str): The encoded JWT token.
+         identity_claim (str): The key of the identity claim in the decoded token dictionary.
       """
 
       decoded_token = decode_token(encoded_token)
@@ -35,6 +48,7 @@ class TokenRepository(Repository):
 
       db_session.add(token)
       db_session.commit()
+        
 
    def is_invalid(self, token: Token, editing: bool = False) -> list:
       """Checks if a given model object is valid.
@@ -45,7 +59,6 @@ class TokenRepository(Repository):
 
       Returns:
          list: A list containing the fields errors.
-
       """
 
       invalid = list()       
