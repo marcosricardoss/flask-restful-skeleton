@@ -17,7 +17,8 @@ def register_commands(app):
 @click.argument('password')
 @with_appcontext
 def add_user_command(username: str, password: str) -> None:
-    """Creates the tables into the database.
+    """This function is executed through the 'user' line command.
+    e.g.: flask user demo demo
     
     Parameters:
         username (str): The username of the user.
@@ -29,8 +30,7 @@ def add_user_command(username: str, password: str) -> None:
     
 
 def add_user(username: str, password: str) -> None:
-    """This function is executed through the 'add-root' line
-    command, than it creates user into the database.
+    """Create a new user.
     
     Parameters:
         username (str): The username of the user.
