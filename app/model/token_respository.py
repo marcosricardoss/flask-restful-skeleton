@@ -2,9 +2,12 @@
 
 from datetime import datetime
 
+from sqlalchemy.orm.exc import NoResultFound
 from flask_jwt_extended import decode_token
 
 from app.database import db_session
+from app.exceptions import TokenNotFound
+
 from .models import Token
 from .repository import Repository
 
@@ -48,7 +51,43 @@ class TokenRepository(Repository):
 
       db_session.add(token)
       db_session.commit()
-        
+
+
+   def change_token_revoking(self, token_id:int, username:str, value:bool) -> None:
+      """Revokes the given token. Raises a TokenNotFound error if the 
+      token does not exist in the database.
+
+      Parameters:
+         token_id (str): Token's id.
+         username (str): User's username.
+         value (bool): value to apply on the token.
+      """
+
+      try:
+         token = db_session.query(Token).filter_by(id=token_id, user_identity=username).one()
+         token.revoked = value
+         db_session.commit()
+      except NoResultFound:
+         raise TokenNotFound("Could not find the token {}".format(token_id))
+
+
+   def is_token_revoked(self, decoded_token:str) -> bool:
+      """Checks if the given token is revoked or not. Because we are adding all the
+      tokens that we create into this database, if the token is not present
+      in the database we are going to consider it revoked, as we don't know where
+      it was created.
+
+      Parameters:
+         encoded_token (str): The encoded JWT token.      
+      """
+
+      jti = decoded_token['jti']
+      try:
+         token = db_session.query(Token).filter_by(jti=jti).one()
+         return token.revoked
+      except NoResultFound:
+         return True
+
 
    def is_invalid(self, token: Token, editing: bool = False) -> list:
       """Checks if a given model object is valid.
