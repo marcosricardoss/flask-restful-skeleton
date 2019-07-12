@@ -52,6 +52,8 @@ class TokenRepository(Repository):
       db_session.add(token)
       db_session.commit()
 
+      return token
+
 
    def change_token_revoking(self, token_id:int, username:str, value:bool) -> None:
       """Changes the revoking status of the given token. Raises a 
@@ -79,6 +81,9 @@ class TokenRepository(Repository):
 
       Parameters:
          encoded_token (str): The encoded JWT token.      
+
+      Returns:
+        A boolean indicating the revoking status.
       """
 
       jti = decoded_token['jti']
