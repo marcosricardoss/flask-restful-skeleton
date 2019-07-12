@@ -54,8 +54,8 @@ class TokenRepository(Repository):
 
 
    def change_token_revoking(self, token_id:int, username:str, value:bool) -> None:
-      """Revokes the given token. Raises a TokenNotFound error if the 
-      token does not exist in the database.
+      """Changes the revoking status of the given token. Raises a 
+      TokenNotFound error if the token does not exist in the database.
 
       Parameters:
          token_id (str): Token's id.
