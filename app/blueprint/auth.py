@@ -9,6 +9,7 @@ from flask_jwt_extended import (
     jwt_required, create_access_token, create_refresh_token, jwt_required, get_raw_jwt,
     jwt_refresh_token_required, get_jwt_identity
 )
+from app.exceptions import TokenNotFound
 from app.model import User, Token
 from app.model import UserRepository, TokenRepository
 
@@ -72,24 +73,6 @@ def refresh():
     }), 200)
 
 
-@bp.route('/logout', methods=('POST',))
-@jwt_required
-def logout() -> Response:
-    """Logout of the user by invalidating the current token.
-
-    Returns:
-        response: flask.Response object with the application/json mimetype.
-    """
-
-    jti = get_raw_jwt()['jti']
-    # TODO: ADD THE JTI THE BLACK LIST
-    
-    return make_response(jsonify({
-        'status': 'success',
-        'message': 'Logout Successful'
-    }), 200)
-
-
 @bp.route('/register', methods=('POST',))
 def register() -> Response:
     """Register a new user.
@@ -134,3 +117,35 @@ def get_tokens():
         'status': 'success',
         'data': data
     }), 200)
+
+
+@bp.route('/token/<int:token_id>', methods=['PUT'])
+@jwt_required
+def modify_token(token_id:int):
+    # Get and verify the desired revoked status from the body    
+
+    if not request.is_json:
+        abort(400)
+
+    revoke = request.json.get('revoke', None)   
+    if revoke is None or not isinstance(revoke, bool):
+        abort(400)
+
+    # Revoke or unrevoke the token based on what was passed to this function
+    user_identity = get_jwt_identity()
+    try:
+        token_repository = TokenRepository()
+        if revoke:            
+            token_repository.change_token_revoking(token_id, user_identity, True)
+            return make_response(jsonify({
+                'status': 'success',
+                'message': 'Token revoked'
+            }), 200)
+        else:
+            token_repository.change_token_revoking(token_id, user_identity, False)
+            return make_response(jsonify({
+                'status': 'success',
+                'message': 'Token unrevoked'
+            }), 200)
+    except TokenNotFound:
+        return jsonify({'msg': 'The specified token was not found'}), 404    
