@@ -42,23 +42,3 @@ def register_handler(app):
             'status': 'error',
             'message': 'not Found'
         }), 404)
-
-    @app.errorhandler(500)
-    def internal_server_error(error):
-        """ Deal with HTTP InternalServerError exceptions.
-
-        Parameters:
-            error (InternalServerError): A werkzeug.exceptions.InternalServerError 
-                                         exception object.
-
-        Returns:
-            A flask response object.
-        """
-
-        msg = str()
-        msg += "Sorry, We're having technical difficulties processing your request."
-        msg += "Our Developers would fix this issue as soon as possible."
-        return make_response(jsonify({
-            'status': 'error',
-            'message': msg
-        }), 500)
