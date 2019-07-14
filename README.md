@@ -25,13 +25,13 @@ The interface with the model layer is given by classes that use the **Repository
 ## Project layout
 	.
 	└── app
-	   ├── authentication
+	   ├── authentication.py
 	   ├── blueprint
-	   │   ├── handler
+	   │   ├── account.py
 	   │   ├── auth.py
-	   │   ├── index.py
-	   │   └── users.py
-	   ├── commands
+	   │   ├── handlers.py	
+	   │   └── index.py
+	   ├── commands.py
 	   ├── config.py
 	   ├── database.py
 	   ├── exceptions.py
@@ -47,9 +47,10 @@ The interface with the model layer is given by classes that use the **Repository
 **app/blueprint**: The *controller* layer.
 
 - **handler**: Contains functions to deal with the error exceptions of API.
+- **account.py**: A blueprint to organize and group views related to the `/account` endpoints.
 - **auth.py**: A blueprint to organize and group views related to the `/auth` endpoints.
 - **index.py**: A blueprint to organize and group views related to the index endpoint.
-- **user.py**: A blueprint to organize and group views related to the `/users` endpoints.
+
 
 **app/commands**: Package to keep the commands line.
 
