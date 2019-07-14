@@ -13,6 +13,10 @@ def test_patch_delete_with_all_data_passed_returning_200_status_code(client, ses
                              headers={'Authorization': 'Bearer ' + tokens['access']['enconded']})
     assert response.status_code == 201
 
+    from app.model import Token
+    tokens = session.query(Token).filter_by(user_identity=user.username, revoked=False).all()
+    assert len(tokens) == 0
+
 
 def test_patch_delete_with_inexistent_user_id_returning_404_status_code(client, session):
     user = create_user(session)
