@@ -15,19 +15,19 @@ def test_acces_an_inexistent_url_returning_404_status_code(client):
 
 
 def test_to_access_a_protected_url_returning_200_status_code(client, auth):
-    endpoint = '/auth/token'
+    endpoint = '/account'
     response = client.get(endpoint, headers=auth['access_token'])
     assert response.status_code == 200
 
 
 def test_to_access_a_protected_url_with_a_invalid_token_returning_422_status_code(client):
-    endpoint = '/auth/token'
+    endpoint = '/account'
     response = client.get(endpoint, headers={'Authorization': 'Bearer xxxxxxxxxxxxxxxxxxx'})
     assert response.status_code == 422
     assert response.json['msg'] == 'Not enough segments'
 
 
 def test_to_access_a_protected_url_returning_401_status_code(client):
-    endpoint = '/auth/token'
+    endpoint = '/account'
     response = client.get(endpoint)
     assert response.status_code == 401
