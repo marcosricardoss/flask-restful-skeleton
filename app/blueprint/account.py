@@ -8,7 +8,7 @@ from flask import (
 from flask_jwt_extended import (
     jwt_required, get_jwt_identity
 )
-from app.model import UserRepository
+from app.model import UserRepository, TokenRepository
 
 
 bp = Blueprint('account', __name__, url_prefix='/account')
@@ -129,6 +129,7 @@ def delete_account() -> Response:
 
     if user:
         user_repository.delete(user)
+        TokenRepository().revoke_all_tokens(user_identity)
         return make_response('', 201)
 
     abort(404)

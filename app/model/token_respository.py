@@ -72,6 +72,17 @@ class TokenRepository(Repository):
       except NoResultFound:
          raise TokenNotFound("Could not find the token {}".format(token_id))
 
+   
+   def revoke_all_tokens(self, username:str) -> None:
+      """Revoke all tokens of the given user.
+
+      Parameters:
+         username (str): User's username.
+      """
+
+      db_session.query(Token).filter_by(user_identity=username).update({Token.revoked:True})
+      db_session.commit()
+
 
    def is_token_revoked(self, decoded_token:str) -> bool:
       """Checks if the given token is revoked or not. Because we are adding all the
