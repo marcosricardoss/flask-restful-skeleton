@@ -95,7 +95,7 @@ def init_blueprints(app: Flask) -> None:
     """
 
     # error handlers
-    from .blueprint.handler import register_handler
+    from .blueprint.handlers import register_handler
     register_handler(app)
 
     # error Handlers
