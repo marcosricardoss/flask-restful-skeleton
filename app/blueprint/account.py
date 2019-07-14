@@ -54,7 +54,7 @@ def update_account() -> Response:
         abort(404)
 
     # updating the user
-    user.username = request.json.get('username')
+    user.username = user_identity
     user.password = request.json.get('password')
 
     # validating the user
@@ -95,6 +95,7 @@ def patch_account() -> Response:
     # update the object values
     for key, value in request.json.items():
         setattr(user, key, value)
+    user.username = user_identity
 
     # validating the user
     is_invalid = user_repository.is_invalid(user)
