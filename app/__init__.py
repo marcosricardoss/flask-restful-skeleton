@@ -99,10 +99,11 @@ def init_blueprints(app: Flask) -> None:
     register_handler(app)
 
     # error Handlers
-    from .blueprint import index, users, auth
+    from .blueprint import index, users, auth, account
     app.register_blueprint(index.bp)
     app.register_blueprint(users.bp)
     app.register_blueprint(auth.bp)
+    app.register_blueprint(account.bp)
 
 def init_commands(app):
     from app.commands import register_commands
