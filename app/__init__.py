@@ -17,6 +17,7 @@ import os
 from flask import Flask
 from flask_jwt_extended import JWTManager
 
+
 def create_app(test_config: dict = None) -> Flask:
     """This function is responsible to create a Flask instance according
     a previous setting passed from environment. In that process, it also
@@ -29,20 +30,20 @@ def create_app(test_config: dict = None) -> Flask:
         flask.app.Flask: The application instance
     """
 
-    app = Flask(__name__, instance_relative_config=True)    
-    
+    app = Flask(__name__, instance_relative_config=True)
+
     load_config(app, test_config)
-    
+
     init_instance_folder(app)
     init_database(app)
     init_blueprints(app)
     init_commands(app)
-    init_jwt_manager(app)    
+    init_jwt_manager(app)
 
     return app
 
 
-def load_config(app: Flask, test_config: dict) -> None:
+def load_config(app: Flask, test_config: dict = {}) -> None:
     """Load the application's config
 
     Parameters:
@@ -50,16 +51,14 @@ def load_config(app: Flask, test_config: dict) -> None:
         test_config (dict):
     """
 
-    if not test_config:
-        if os.environ.get('FLASK_ENV') == 'development':
-            # load config object containing the development environment settings
-            app.config.from_object('app.config.Development')
-        else:
-            # load config object containing the production environment settings
-            app.config.from_object('app.config.Production')
-    else:
-        # load the test config if passed in
+    if os.environ.get('FLASK_ENV') == 'development' or test_config.get("FLASK_ENV") == 'development':
+        app.config.from_object('app.config.Development')
+
+    elif test_config.get('TESTING'):
         app.config.from_mapping(test_config)
+
+    else:
+        app.config.from_object('app.config.Production')
 
 
 def init_instance_folder(app: Flask) -> None:
@@ -104,9 +103,11 @@ def init_blueprints(app: Flask) -> None:
     app.register_blueprint(auth.bp)
     app.register_blueprint(account.bp)
 
+
 def init_commands(app):
     from app.commands import register_commands
     register_commands(app)
+
 
 def init_jwt_manager(app):
     from .authentication import init
