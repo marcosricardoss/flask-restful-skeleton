@@ -42,17 +42,17 @@ The interface with the model layer is given by classes that use the **Repository
 	       ├── repository.py
 	       └── user_repository.py
 
-**app/authentication:** Contains function decorators used to control JWT tokens authentication.
+**app/authentication.py:** Contains function decorators used to control JWT tokens authentication.
 
 **app/blueprint**: The *controller* layer.
 
-- **handler**: Contains functions to deal with the error exceptions of API.
+- **handlers.py**: Contains functions to deal with the error exceptions of API.
 - **account.py**: A blueprint to organize and group views related to the `/account` endpoints.
 - **auth.py**: A blueprint to organize and group views related to the `/auth` endpoints.
 - **index.py**: A blueprint to organize and group views related to the index endpoint.
 
 
-**app/commands**: Package to keep the commands line.
+**app/commands.py**: Package to keep the commands line.
 
 **app/config.py**: Keeps the settings classes that are loading according to the running environment.
 
@@ -68,6 +68,7 @@ The interface with the model layer is given by classes that use the **Repository
 
 - **models.py**: Persistent objects of the SQLAlchemy.
 - **repository.py**: Contains Repository generic class.
+- **token_respository**: Contains TokenRepository class.
 - **user_repository.py**: Contains UserRepository class.
 
 ## Configuring and Running The Application
