@@ -1,4 +1,4 @@
-"""It contains tests for /auth/refresh endpoint."""
+"""It contains tests for the token refresh endpoint."""
 
 from flask_jwt_extended import decode_token
 

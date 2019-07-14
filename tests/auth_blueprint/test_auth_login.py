@@ -1,4 +1,4 @@
-"""It contains tests for /auth/login endpoint."""
+"""It contains tests for the logining endpoint."""
 
 
 from flask import json
