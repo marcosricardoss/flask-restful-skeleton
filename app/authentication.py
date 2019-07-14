@@ -1,6 +1,5 @@
 """Initialize the JWTManager by setting functionality to manage the token."""
 
-
 def init(jwt):
     """Initialize the JWTManager.
     
