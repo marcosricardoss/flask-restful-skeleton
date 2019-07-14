@@ -73,7 +73,7 @@ class Repository(ABC):
         return deleted
 
     @abstractmethod
-    def is_invalid(self, model: Model, editing: bool = False) -> list:
+    def is_invalid(self, model: Model) -> list:
         """Checks if a given model object is valid.
 
         Parameters:

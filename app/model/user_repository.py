@@ -65,7 +65,7 @@ class UserRepository(Repository):
 
         return False
 
-    def is_invalid(self, user: User, editing: bool = False) -> list:
+    def is_invalid(self, user: User) -> list:
         """Checks if a given model object is valid.
 
         Parameters:
@@ -85,10 +85,14 @@ class UserRepository(Repository):
         if not user.password:
             invalid.append({"password": "must be filled"})
 
-        # verify if there another user with the same username
+        # verify if there is another user with the same username
         user_checking = self.get_by_username(user.username)
         if user_checking:
             if (not user.id) or (user.id != user_checking.id):
                 invalid.append({"username": "is already in use."})
+
+         # remove from the session if it is not valid
+        if invalid:
+            user.remove_session()
 
         return invalid

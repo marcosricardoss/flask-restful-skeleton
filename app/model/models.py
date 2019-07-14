@@ -8,6 +8,7 @@ that is in the same class.
 from abc import abstractmethod
 from datetime import datetime
 
+from sqlalchemy import inspect
 from sqlalchemy import Column, Integer, String, Boolean, DateTime
 from app.database import Base
 
@@ -22,6 +23,13 @@ class Model:
         """Serialize the object attributes values into a dictionary."""
 
         pass
+
+    def remove_session(self):
+        """Removes an object from the session its current session."""
+
+        session = inspect(self).session
+        if session:
+            session.expunge(self)
 
 
 class User(Base, Model):
