@@ -14,7 +14,7 @@ def test_get_account_with_an_existent_user_returning_200_status_code(client, aut
 
 def test_get_account_with_an_user_already_excluded_returning_404_status_code(client, session):
     user = create_user(session)
-    tokens = create_tokens(session, user.username)
+    tokens = create_tokens(user.username)
     # delete the user
     session.delete(user)
     session.commit()

@@ -6,7 +6,7 @@ from ..util import create_user, create_tokens, revoke_token, is_token_revoked
 
 def test_auth_list_tokens_of_logged_user_returning_200_status_code(client, session):
     user = create_user(session)
-    tokens = create_tokens(session, user.username)
+    tokens = create_tokens(user.username)
     # request
     response = client.get('/auth/token',
                           content_type='application/json',
@@ -23,7 +23,7 @@ def test_auth_list_tokens_of_logged_user_returning_200_status_code(client, sessi
 
 
 def test_auth_revoke_an_existent_token_returning_200_status_code(client, session, auth):
-    tokens = create_tokens(session, 'test')
+    tokens = create_tokens('test')
     # request
     url = '/auth/token/{}'.format(tokens['refresh']['model'].id)
     data = {'revoke': True}
@@ -39,7 +39,7 @@ def test_auth_revoke_an_existent_token_returning_200_status_code(client, session
 
 
 def test_auth_unrevoke_an_existent_token_returning_200_status_code(client, session, auth):
-    tokens = create_tokens(session, 'test')
+    tokens = create_tokens('test')
 
     # revoking the refresh token
     revoke_token(tokens['refresh']['model'], 'test')
@@ -58,7 +58,7 @@ def test_auth_unrevoke_an_existent_token_returning_200_status_code(client, sessi
 
 
 def test_auth_revoke_and_try_access_a_protected_url_returning_200_status_code(client, session, auth):
-    tokens = create_tokens(session, 'test')
+    tokens = create_tokens('test')
 
     # revoking the refresh token
     revoke_token(tokens['access']['model'], 'test')
@@ -81,7 +81,7 @@ def test_auth_revoke_with_an_inexistent_token_id_returning_400_status_code(clien
 
 
 def test_auth_revoke_without_data_returning_400_status_code(client, session, auth):
-    tokens = create_tokens(session, 'test')
+    tokens = create_tokens('test')
 
     # revoking the refresh token
     url = '/auth/token/{}'.format(tokens['refresh']['model'].id)
@@ -94,7 +94,7 @@ def test_auth_revoke_without_data_returning_400_status_code(client, session, aut
 
 
 def test_auth_revoke_without_request_content_type_returning_400_status_code(client, session, auth):
-    tokens = create_tokens(session, 'test')
+    tokens = create_tokens('test')
 
     # revoking the refresh token
     url = '/auth/token/{}'.format(tokens['refresh']['model'].id)
@@ -106,7 +106,7 @@ def test_auth_revoke_without_request_content_type_returning_400_status_code(clie
 
 
 def test_auth_revoke_with_invalid_revoke_value_returning_400_status_code(client, session, auth):
-    tokens = create_tokens(session, 'test')
+    tokens = create_tokens('test')
 
     # revoking the refresh token
     url = '/auth/token/{}'.format(tokens['refresh']['model'].id)
@@ -121,7 +121,7 @@ def test_auth_revoke_with_invalid_revoke_value_returning_400_status_code(client,
 
 
 """ def test_auth_revoke_that_not_existent_in_the_database_anymore_returning_400_status_code(client, session):
-    tokens = create_tokens(session, 'test')
+    tokens = create_tokens('test')
 
     # delete the token
     session.delete(tokens['refresh']['model'])

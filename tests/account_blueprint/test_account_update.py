@@ -8,7 +8,7 @@ from ..util import create_user, create_tokens, get_unique_username
 
 def test_update_account_with_data_well_formatted_returning_200_status_code(client, session):
     user = create_user(session)
-    tokens = create_tokens(session, user.username)
+    tokens = create_tokens(user.username)
     endpoint = '/account'
     data = {'password': "x123x"}
     response = client.put(endpoint,
@@ -23,7 +23,7 @@ def test_update_account_with_data_well_formatted_returning_200_status_code(clien
 
 def test_update_account_with_password_length_smaller_than_3_character_returning_400_status_code(client, session):
     user = create_user(session)
-    tokens = create_tokens(session, user.username)
+    tokens = create_tokens(user.username)
     endpoint = '/account'
     data = {'password': "xx"}
     response = client.put(endpoint,
@@ -37,7 +37,7 @@ def test_update_account_with_password_length_smaller_than_3_character_returning_
 
 def test_update_account_with_an_user_already_excluded_returning_404_status_code(client, session):
     user = create_user(session)
-    tokens = create_tokens(session, user.username)
+    tokens = create_tokens(user.username)
     # delete the user
     session.delete(user)
     session.commit()
@@ -53,7 +53,7 @@ def test_update_account_with_an_user_already_excluded_returning_404_status_code(
 
 def test_update_account_without_data_returning_400_status_code(client, session):
     user = create_user(session)
-    tokens = create_tokens(session, user.username)
+    tokens = create_tokens(user.username)
     endpoint = '/account'
     response = client.put(endpoint,
                           content_type='application/json',
@@ -65,7 +65,7 @@ def test_update_account_without_data_returning_400_status_code(client, session):
 
 def test_update_account_without_request_content_type_returning_400_status_code(client, session):
     user = create_user(session)
-    tokens = create_tokens(session, user.username)
+    tokens = create_tokens(user.username)
     endpoint = '/account'
     response = client.put(endpoint,
                           headers={'Authorization': 'Bearer ' + tokens['access']['enconded']})
@@ -76,7 +76,7 @@ def test_update_account_without_request_content_type_returning_400_status_code(c
 
 def test_update_account_with_empty_data_returning_400_status_code(client, session):
     user = create_user(session)
-    tokens = create_tokens(session, user.username)
+    tokens = create_tokens(user.username)
     endpoint = '/account'
     data = {}
     response = client.put(endpoint,
@@ -90,7 +90,7 @@ def test_update_account_with_empty_data_returning_400_status_code(client, sessio
 
 def test_update_account_without_password_returning_400_status_code(client, session):
     user = create_user(session)
-    tokens = create_tokens(session, user.username)
+    tokens = create_tokens(user.username)
     endpoint = '/account'
     data = {'username': 'user'}
     response = client.put(endpoint,

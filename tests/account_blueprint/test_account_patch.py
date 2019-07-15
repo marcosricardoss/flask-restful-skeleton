@@ -8,7 +8,7 @@ from ..util import create_user, create_tokens, get_unique_username
 
 def test_patch_account_with_data_well_formatted_returning_200_status_code(client, session, auth):
     user = create_user(session)
-    tokens = create_tokens(session, user.username)
+    tokens = create_tokens(user.username)
     endpoint = '/account'
     data = {'password': "x123x"}
     response = client.patch(endpoint,
@@ -23,7 +23,7 @@ def test_patch_account_with_data_well_formatted_returning_200_status_code(client
 
 def test_patch_account_with_password_length_smaller_than_3_character_returning_400_status_code(client, session):
     user = create_user(session)
-    tokens = create_tokens(session, user.username)
+    tokens = create_tokens(user.username)
     endpoint = '/account'
     data = {'password': "xx"}
     response = client.patch(endpoint,
@@ -37,7 +37,7 @@ def test_patch_account_with_password_length_smaller_than_3_character_returning_4
 
 def test_patch_account_with_an_user_already_excluded_returning_404_status_code(client, session):
     user = create_user(session)
-    tokens = create_tokens(session, user.username)
+    tokens = create_tokens(user.username)
     # delete the user
     session.delete(user)
     session.commit()
@@ -53,7 +53,7 @@ def test_patch_account_with_an_user_already_excluded_returning_404_status_code(c
 
 def test_patch_account_without_data_returning_400_status_code(client, session):
     user = create_user(session)
-    tokens = create_tokens(session, user.username)
+    tokens = create_tokens(user.username)
     endpoint = '/account'
     response = client.patch(endpoint,
                             content_type='application/json',
@@ -65,7 +65,7 @@ def test_patch_account_without_data_returning_400_status_code(client, session):
 
 def test_patch_account_with_only_password_passed_returning_200_status_code(client, session, auth):
     user = create_user(session)
-    tokens = create_tokens(session, user.username)
+    tokens = create_tokens(user.username)
     endpoint = '/account'
     data = {'password': "x123x"}
     response = client.patch(endpoint,

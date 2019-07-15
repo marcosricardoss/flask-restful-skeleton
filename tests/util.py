@@ -68,7 +68,7 @@ def get_unique_id():
     return unique
 
 
-def create_tokens(session, username):
+def create_tokens(username):
     """Create encoded token, a decode token and model token 
     for both access and refresh tokens.
 
