@@ -85,6 +85,9 @@ class UserRepository(Repository):
         if not user.password:
             invalid.append({"password": "must be filled"})
 
+        if user.password and len(user.password) < 3:
+            invalid.append({"password": "minimum length of 3 characters"})
+
         # verify if there is another user with the same username
         user_checking = self.get_by_username(user.username)
         if user_checking:
