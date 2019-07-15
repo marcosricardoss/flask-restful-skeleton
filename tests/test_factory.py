@@ -6,9 +6,10 @@ from dotenv import load_dotenv
 from app import create_app
 
 
-def test_with_config_not_testing():
+
+def test_without_config():
     load_dotenv()
-    config = {'SQLALCHEMY_DATABASE_URI': os.environ.get('DATABASE_URL')}
+    config = {}
     assert not create_app(config).testing
 
 
@@ -16,6 +17,46 @@ def test_with_test_config_testing():
     load_dotenv()
     config = {
         'TESTING': True,
+        'DEBUG': True,
         'SQLALCHEMY_DATABASE_URI': os.environ.get('DATABASE_URL')
     }
-    assert create_app(config).testing
+    app = create_app(config)
+    assert app.testing
+    assert app.debug
+    assert app.config.get('SQLALCHEMY_DATABASE_URI') == os.environ.get('DATABASE_URL')
+
+
+def test_with_development_config():
+    load_dotenv()
+    config = {
+        'FLASK_ENV': 'development',
+        'SQLALCHEMY_DATABASE_URI': os.environ.get('DATABASE_URL')
+    }
+    app = create_app(config)
+    assert not app.testing
+    assert app.debug
+    assert app.config.get('JWT_BLACKLIST_ENABLED') == True
+    assert app.config.get('JWT_BLACKLIST_TOKEN_CHECKS') == ['access', 'refresh']
+    assert app.config.get('SQLALCHEMY_TRACK_MODIFICATIONS') == False
+    assert app.config.get('SECRET_KEY') == 'dev'
+    assert app.config.get('JWT_SECRET_KEY') == 'dev'
+    assert app.config.get('SQLALCHEMY_DATABASE_URI') == os.environ.get('DATABASE_URL')
+    
+
+def test_with_production_config():
+    load_dotenv()
+    config = {
+        'FLASK_ENV': 'production',
+        'SQLALCHEMY_DATABASE_URI': os.environ.get('DATABASE_URL')
+    }
+    app = create_app(config) 
+    from app.config import Production, Development
+    assert not app.testing
+    assert not app.debug
+    assert app.config.get('JWT_BLACKLIST_ENABLED') == True
+    assert app.config.get('JWT_BLACKLIST_TOKEN_CHECKS') == ['access', 'refresh']
+    assert app.config.get('SQLALCHEMY_TRACK_MODIFICATIONS') == False
+    assert app.config.get('SECRET_KEY') == Production.SECRET_KEY
+    assert app.config.get('JWT_SECRET_KEY') == Production.JWT_SECRET_KEY
+    assert app.config.get('SQLALCHEMY_DATABASE_URI') == os.environ.get('DATABASE_URL')   
+    
