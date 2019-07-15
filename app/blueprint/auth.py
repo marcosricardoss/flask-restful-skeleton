@@ -175,4 +175,7 @@ def modify_token(token_id: int):
                 'message': 'Token unrevoked'
             }), 200)
     except TokenNotFound:
-        return jsonify({'msg': 'The specified token was not found'}), 404
+        return make_response(jsonify({
+            'status': 'fail',
+            'message': 'The specified token was not found'
+        }), 404)
