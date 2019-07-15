@@ -14,7 +14,8 @@ class Default():
         SQLALCHEMY_TRACK_MODIFICATIONS (boolean): signals to get notified
         before and after changes are committed to the database.
     """
-
+    DEBUG = False
+    TESTING = False
     JWT_BLACKLIST_ENABLED = True
     JWT_BLACKLIST_TOKEN_CHECKS = ['access', 'refresh']
     SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -48,6 +49,7 @@ class Development(Default):
 
     load_dotenv()  # loading .env
 
+    DEBUG = True
     SECRET_KEY = 'dev'
     JWT_SECRET_KEY = 'dev'
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
