@@ -27,15 +27,3 @@ def test_session_is_close(app):
 
     # the session returned to pool
     assert db_session()._is_clean()
-
-
-def test_add_user_command(runner, monkeypatch):
-    class Recorder():
-        called = False
-
-    def fake_add_user(username, password):
-        Recorder.called = True
-
-    monkeypatch.setattr('app.commands.add_user', fake_add_user)
-    result = runner.invoke(args=['user', 'admin', '123'])
-    assert Recorder.called
