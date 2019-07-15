@@ -37,6 +37,7 @@ def test_auth_login_without_data_returning_400_status_code(client):
     response = client.post('/auth/login', content_type='application/json')
     assert response.status_code == 400
     assert response.json['status'] == 'fail'
+    assert response.json['message'] == 'bad request'
 
 
 def test_auth_login_with_empty_data_returning_400_status_code(client):
@@ -44,6 +45,7 @@ def test_auth_login_with_empty_data_returning_400_status_code(client):
                            content_type='application/json')
     assert response.status_code == 400
     assert response.json['status'] == 'fail'
+    assert response.json['message'] == 'bad request'
 
 
 def test_auth_login_without_username_returning_400_status_code(client):
@@ -53,6 +55,7 @@ def test_auth_login_without_username_returning_400_status_code(client):
                            content_type='application/json')
     assert response.status_code == 400
     assert response.json['status'] == 'fail'
+    assert response.json['message'] == 'bad request'
 
 
 def test_auth_login_without_password_returning_400_status_code(client):
@@ -62,6 +65,7 @@ def test_auth_login_without_password_returning_400_status_code(client):
                            content_type='application/json')
     assert response.status_code == 400
     assert response.json['status'] == 'fail'
+    assert response.json['message'] == 'bad request'
 
 
 def test_auth_login_with_an_inexistent_username_returning_401_status_code(client):

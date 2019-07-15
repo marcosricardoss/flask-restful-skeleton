@@ -77,6 +77,7 @@ def test_auth_revoke_with_an_inexistent_token_id_returning_400_status_code(clien
                           headers=auth['access_token'])
     assert response.status_code == 400
     assert response.json['status'] == 'fail'
+    assert response.json['message'] == 'bad request'
 
 
 def test_auth_revoke_without_data_returning_400_status_code(client, session, auth):
@@ -89,10 +90,22 @@ def test_auth_revoke_without_data_returning_400_status_code(client, session, aut
                           headers={'Authorization': 'Bearer ' + tokens['access']['enconded']})
     assert response.status_code == 400
     assert response.json['status'] == 'fail'
+    assert response.json['message'] == 'bad request'
+
+
+def test_auth_revoke_without_request_content_type_returning_400_status_code(client, session, auth):
+    tokens = create_tokens(session, 'test')
+
+    # revoking the refresh token
+    url = '/auth/token/{}'.format(tokens['refresh']['model'].id)
+    response = client.put(url,
+                          headers={'Authorization': 'Bearer ' + tokens['access']['enconded']})
+    assert response.status_code == 400
+    assert response.json['status'] == 'fail'   
+    assert response.json['message'] == 'bad request' 
 
 
 def test_auth_revoke_with_invalid_revoke_value_returning_400_status_code(client, session, auth):
-    user = create_user(session)
     tokens = create_tokens(session, 'test')
 
     # revoking the refresh token
@@ -104,3 +117,22 @@ def test_auth_revoke_with_invalid_revoke_value_returning_400_status_code(client,
                           headers={'Authorization': 'Bearer ' + tokens['access']['enconded']})
     assert response.status_code == 400
     assert response.json['status'] == 'fail'
+    assert response.json['message'] == 'bad request'
+
+
+""" def test_auth_revoke_that_not_existent_in_the_database_anymore_returning_400_status_code(client, session):
+    tokens = create_tokens(session, 'test')
+
+    # delete the token
+    session.delete(tokens['refresh']['model'])
+    session.commit()
+
+    # revoking the refresh token
+    url = '/auth/token/{}'.format(tokens['refresh']['model'].id)
+    data = {'revoke': "xxxxx"}
+    response = client.put(url,
+                          content_type='application/json',
+                          data=json.dumps(data),
+                          headers={'Authorization': 'Bearer ' + tokens['access']['enconded']})
+    assert response.status_code == 400
+    assert response.json['status'] == 'fail' """

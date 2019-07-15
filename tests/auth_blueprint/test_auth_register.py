@@ -18,6 +18,15 @@ def test_auth_register_with_data_well_formatted_returning_200_status_code(client
 def test_auth_register_without_data_returning_400_status_code(client):
     response = client.post('/auth/register', content_type='application/json')
     assert response.status_code == 400
+    assert response.json['status'] == 'fail'
+    assert response.json['message'] == 'bad request'
+
+
+def test_auth_register_without_request_content_type_returning_400_status_code(client):
+    response = client.post('/auth/register')
+    assert response.status_code == 400    
+    assert response.json['status'] == 'fail'
+    assert response.json['message'] == 'bad request'
 
 
 def test_auth_register_with_empty_data_returning_400_status_code(client):
