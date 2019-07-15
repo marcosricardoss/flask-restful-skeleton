@@ -31,3 +31,4 @@ def test_to_access_a_protected_url_returning_401_status_code(client):
     endpoint = '/account'
     response = client.get(endpoint)
     assert response.status_code == 401
+    assert response.json['msg'] == 'Missing Authorization Header'
