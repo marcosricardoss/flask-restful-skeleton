@@ -120,19 +120,42 @@ def test_auth_revoke_with_invalid_revoke_value_returning_400_status_code(client,
     assert response.json['message'] == 'bad request'
 
 
-""" def test_auth_revoke_that_not_existent_in_the_database_anymore_returning_400_status_code(client, session):
+def test_auth_revoke_that_not_existent_in_the_database_anymore_returning_400_status_code(client, session):
     tokens = create_tokens('test')
+    token_id = tokens['refresh']['model'].id
 
     # delete the token
-    session.delete(tokens['refresh']['model'])
+    from app.model import Token
+    token = session.query(Token).filter_by(id=token_id).one()
+    session.delete(token)
     session.commit()
 
     # revoking the refresh token
-    url = '/auth/token/{}'.format(tokens['refresh']['model'].id)
-    data = {'revoke': "xxxxx"}
+    url = '/auth/token/{}'.format(token_id)
+    data = {'revoke': True}
     response = client.put(url,
                           content_type='application/json',
                           data=json.dumps(data),
                           headers={'Authorization': 'Bearer ' + tokens['access']['enconded']})
-    assert response.status_code == 400
-    assert response.json['status'] == 'fail' """
+    assert response.status_code == 404
+    assert response.json['status'] == 'fail'
+    assert response.json['message'] == 'The specified token was not found'
+
+
+def test_auth_token_no_existent_in_the_database_anymore_returning_400_status_code(client, session):
+    tokens = create_tokens('test')
+    token_id = tokens['access']['model'].id
+
+    # delete the token
+    from app.model import Token
+    token = session.query(Token).filter_by(id=token_id).one()
+    session.delete(token)
+    session.commit()
+
+    # revoking the refresh token
+    url = '/auth/token'
+    response = client.get(url,
+                          content_type='application/json',
+                          headers={'Authorization': 'Bearer ' + tokens['access']['enconded']})
+    assert response.status_code == 401
+    assert response.json['msg'] == 'Token has been revoked'
