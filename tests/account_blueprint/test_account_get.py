@@ -23,4 +23,5 @@ def test_get_account_with_an_user_already_excluded_returning_404_status_code(cli
                           headers={'Authorization': 'Bearer ' + tokens['access']['enconded']})
     # asserts
     assert response.status_code == 404
-    
+    assert response.json['status'] == 'error'
+    assert response.json['message'] == 'not Found'

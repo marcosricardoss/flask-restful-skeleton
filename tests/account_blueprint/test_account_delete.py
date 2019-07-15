@@ -32,3 +32,5 @@ def test_patch_delete_with_inexistent_user_id_returning_404_status_code(client, 
     response = client.delete(endpoint, 
                              headers={'Authorization': 'Bearer ' + tokens['access']['enconded']})
     assert response.status_code == 404
+    assert response.json['status'] == 'error'
+    assert response.json['message'] == 'not Found'
