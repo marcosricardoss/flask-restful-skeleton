@@ -7,7 +7,6 @@ from sqlalchemy import desc
 from app.database import db_session
 from .models import Model
 
-
 class Repository(ABC):
     """This class implements the common methods used
     for all specific repositories classes. The subclasses
@@ -16,6 +15,7 @@ class Repository(ABC):
 
     def __init__(self, model_class):
         self.__model_class = model_class
+        self.session = db_session
 
     def get(self, model_id: int) -> Model:
         """Retrieve a model register from database by its id.
@@ -27,7 +27,7 @@ class Repository(ABC):
            Model: a model object.
         """
 
-        return db_session.query(self.__model_class).filter_by(id=model_id).first()
+        return self.session.query(self.__model_class).filter_by(id=model_id).first()
 
     def get_all(self) -> list:
         """Retrieves a list of all elements in the database.
@@ -36,7 +36,7 @@ class Repository(ABC):
            list: a list of model objects.
         """
 
-        return db_session.query(self.__model_class).order_by(desc(self.__model_class.id))
+        return self.session.query(self.__model_class).order_by(desc(self.__model_class.id))
 
     def save(self, model: Model) -> None:
         """Saves a model in the database.
@@ -45,8 +45,8 @@ class Repository(ABC):
            model (Model): A model object.
         """
 
-        db_session.add(model)
-        db_session.commit()
+        self.session.add(model)
+        self.session.commit()
 
     def update(self, model: Model) -> None:
         """Update a existent model register in the database.
@@ -55,7 +55,7 @@ class Repository(ABC):
            model (Model): A model object.
         """
 
-        db_session.commit()
+        self.session.commit()
 
     def delete(self, model: Model) -> int:
         """Delete a existent model register in the database.
@@ -67,8 +67,8 @@ class Repository(ABC):
            int: the a model id that was deleted.
         """
 
-        deleted = db_session.delete(model)
-        db_session.commit()
+        deleted = self.session.delete(model)
+        self.session.commit()
 
         return deleted
 
@@ -85,4 +85,4 @@ class Repository(ABC):
 
         """
 
-        pass
+        return []
