@@ -25,7 +25,7 @@ class UserRepository(Repository):
             User: User model object.
         """
 
-        return db_session.query(User).filter_by(username=username).first()
+        return self.session.query(User).filter_by(username=username).first()
 
     def save(self, user: User) -> None:
         """Saves a user in the database.
@@ -35,8 +35,8 @@ class UserRepository(Repository):
         """
 
         user.password = generate_password_hash(user.password)
-        db_session.add(user)
-        db_session.commit()
+        self.session.add(user)
+        self.session.commit()
 
     def update(self, user: User) -> None:
         """Update a existent user in the database.
@@ -46,7 +46,7 @@ class UserRepository(Repository):
         """
 
         user.password = generate_password_hash(user.password)
-        db_session.commit()
+        self.session.commit()
 
     def authenticate(self, username: str, password: str) -> bool:
         """checks user authenticity by username and password.
