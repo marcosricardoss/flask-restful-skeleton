@@ -5,7 +5,6 @@ that is in the same class.
 """
 
 
-from abc import abstractmethod
 from datetime import datetime
 
 from sqlalchemy import inspect
@@ -14,15 +13,14 @@ from app.database import Base
 
 
 class Model:
-    """The Model class declare the serialize() abstract method that is
+    """The Model class declare the serialize() method that is
     supposed to serializes the model data. The Model's subclasses
-    must provide a implementation of this method."""
+    can provide a implementation of this method."""
 
-    @abstractmethod
     def serialize(self) -> dict:
         """Serialize the object attributes values into a dictionary."""
 
-        pass
+        return {}
 
     def remove_session(self):
         """Removes an object from the session its current session."""
@@ -135,7 +133,7 @@ class Token(Base, Model):
         """
 
         data = {
-            'id': self.id,
+            'id': str(self.id),
             'jti': self.jti,
             'token_type': self.token_type,
             'user_identity': self.user_identity,
@@ -144,3 +142,6 @@ class Token(Base, Model):
         }
 
         return data
+
+    def __repr__(self) -> str:
+        return '<Token %r>' % (self.jti)
