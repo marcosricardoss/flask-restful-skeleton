@@ -10,6 +10,7 @@ from flask_jwt_extended import (
 from sqlalchemy import desc
 from werkzeug.security import generate_password_hash
 
+
 def create_user(session):
     """Creates new user.
 
@@ -80,22 +81,24 @@ def create_tokens(username):
         A dictionary with an encoded token, a decode token and model 
         token for both access and refresh tokens.
     """
-    
+
     from app.model import Token, TokenRepository
 
     # access token
     access_tk_encoded = create_access_token(identity=username)
     access_tk_decoded = decode_token(access_tk_encoded)
-    
+
     # refresh token
     refresh_tk_encoded = create_refresh_token(identity=username)
     refresh_tk_decoded = decode_token(refresh_tk_encoded)
 
     # token models
     token_repository = TokenRepository()
-    access_tk_model = token_repository.save(access_tk_encoded, current_app.config["JWT_IDENTITY_CLAIM"])
-    refresh_tk_model = token_repository.save(refresh_tk_encoded, current_app.config["JWT_IDENTITY_CLAIM"])
-   
+    access_tk_model = token_repository.save(
+        access_tk_encoded, current_app.config["JWT_IDENTITY_CLAIM"])
+    refresh_tk_model = token_repository.save(
+        refresh_tk_encoded, current_app.config["JWT_IDENTITY_CLAIM"])
+
     return {
         'access': {
             'enconded': access_tk_encoded,
@@ -130,7 +133,7 @@ def revoke_token(token_model, username):
     Parameters:
         username (str): the user that owns the token.
         token_model(Token): a token SLQAlchmey model.
-    
+
     """
 
     from app.model import TokenRepository
