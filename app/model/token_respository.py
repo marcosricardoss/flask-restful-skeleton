@@ -5,7 +5,6 @@ from datetime import datetime
 from sqlalchemy.orm.exc import NoResultFound
 from flask_jwt_extended import decode_token
 
-from app.database import db_session
 from app.exceptions import TokenNotFound
 
 from .models import Token
@@ -29,7 +28,7 @@ class TokenRepository(Repository):
          list: A token list of a user.
       """
 
-      return db_session.query(Token).filter_by(user_identity=user_identity).all()
+      return self.session.query(Token).filter_by(user_identity=user_identity).all()
 
    def save(self, encoded_token:str, identity_claim:str=None) -> None:
       """Adds a new token to the database. It is not revoked when it is added.
@@ -49,8 +48,8 @@ class TokenRepository(Repository):
       token = Token(jti=jti, token_type=token_type, user_identity=user_identity,
                     expires=expires, revoked=revoked)
 
-      db_session.add(token)
-      db_session.commit()
+      self.session.add(token)
+      self.session.commit()
 
       return token
 
@@ -66,9 +65,9 @@ class TokenRepository(Repository):
       """
 
       try:
-         token = db_session.query(Token).filter_by(id=token_id, user_identity=username).one()
+         token = self.session.query(Token).filter_by(id=token_id, user_identity=username).one()
          token.revoked = value
-         db_session.commit()
+         self.session.commit()
       except NoResultFound:
          raise TokenNotFound("Could not find the token {}".format(token_id))
 
@@ -80,8 +79,8 @@ class TokenRepository(Repository):
          username (str): User's username.
       """
 
-      db_session.query(Token).filter_by(user_identity=username).update({Token.revoked:True})
-      db_session.commit()
+      self.session.query(Token).filter_by(user_identity=username).update({Token.revoked:True})
+      self.session.commit()
 
 
    def is_token_revoked(self, decoded_token:str) -> bool:
@@ -99,13 +98,13 @@ class TokenRepository(Repository):
 
       jti = decoded_token['jti']
       try:
-         token = db_session.query(Token).filter_by(jti=jti).one()
+         token = self.session.query(Token).filter_by(jti=jti).one()
          return token.revoked
       except NoResultFound:
          return True
 
 
-   def is_invalid(self, token: Token, editing: bool = False) -> list:
+   def is_invalid(self, token: Token) -> list:
       """Checks if a given model object is valid.
 
       Parameters:
