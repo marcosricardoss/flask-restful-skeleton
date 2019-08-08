@@ -3,10 +3,16 @@
 from datetime import datetime
 
 from flask import json
-from ..util import create_user, create_tokens, get_unique_username
+from tests.util import create_user, create_tokens, get_unique_username
 
 
 def test_update_account_with_data_well_formatted_returning_200_status_code(client, session):
+    """
+    GIVEN a Flask application
+    WHEN the '/account' URL is requested (PUT)
+    THEN check the response is valid
+    """
+
     user = create_user(session)
     tokens = create_tokens(user.username)
     endpoint = '/account'
@@ -22,6 +28,12 @@ def test_update_account_with_data_well_formatted_returning_200_status_code(clien
 
 
 def test_update_account_with_password_length_smaller_than_3_character_returning_400_status_code(client, session):
+    """
+    GIVEN a Flask application
+    WHEN the '/account' URL is requested (PUT) with invalid password value
+    THEN check the response HTTP 400 response
+    """
+
     user = create_user(session)
     tokens = create_tokens(user.username)
     endpoint = '/account'
@@ -36,6 +48,12 @@ def test_update_account_with_password_length_smaller_than_3_character_returning_
 
 
 def test_update_account_with_an_user_already_excluded_returning_404_status_code(client, session):
+    """
+    GIVEN a Flask application
+    WHEN the '/account' URL is requested (PUT) with inexistent user
+    THEN check the response HTTP 404 response
+    """
+
     user = create_user(session)
     tokens = create_tokens(user.username)
     # delete the user
@@ -52,6 +70,12 @@ def test_update_account_with_an_user_already_excluded_returning_404_status_code(
 
 
 def test_update_account_without_data_returning_400_status_code(client, session):
+    """
+    GIVEN a Flask application
+    WHEN the '/account' URL is requested (PUT) without data
+    THEN check the response HTTP 400 response
+    """
+
     user = create_user(session)
     tokens = create_tokens(user.username)
     endpoint = '/account'
@@ -64,6 +88,12 @@ def test_update_account_without_data_returning_400_status_code(client, session):
 
 
 def test_update_account_without_request_content_type_returning_400_status_code(client, session):
+    """
+    GIVEN a Flask application
+    WHEN the '/account' URL is requested (PUT) without the request content type
+    THEN check the response HTTP 400 response
+    """
+
     user = create_user(session)
     tokens = create_tokens(user.username)
     endpoint = '/account'
@@ -75,6 +105,11 @@ def test_update_account_without_request_content_type_returning_400_status_code(c
 
 
 def test_update_account_with_empty_data_returning_400_status_code(client, session):
+    """
+    GIVEN a Flask application
+    WHEN the '/account' URL is requested (PUT) with empty data
+    THEN check the response HTTP 400 response
+    """
     user = create_user(session)
     tokens = create_tokens(user.username)
     endpoint = '/account'
@@ -89,6 +124,12 @@ def test_update_account_with_empty_data_returning_400_status_code(client, sessio
 
 
 def test_update_account_without_password_returning_400_status_code(client, session):
+    """
+    GIVEN a Flask application
+    WHEN the '/account' URL is requested (PUT) without password passed
+    THEN check the response HTTP 400 response
+    """
+
     user = create_user(session)
     tokens = create_tokens(user.username)
     endpoint = '/account'

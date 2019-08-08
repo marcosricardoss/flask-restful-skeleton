@@ -3,10 +3,16 @@
 from datetime import datetime
 
 from flask import json
-from ..util import create_user, create_tokens, get_unique_username
+from tests.util import create_user, create_tokens, get_unique_username
 
 
 def test_patch_account_with_data_well_formatted_returning_200_status_code(client, session, auth):
+    """
+    GIVEN a Flask application
+    WHEN the '/account' URL is requested (PATCH)
+    THEN check the response is valid
+    """
+
     user = create_user(session)
     tokens = create_tokens(user.username)
     endpoint = '/account'
@@ -22,6 +28,12 @@ def test_patch_account_with_data_well_formatted_returning_200_status_code(client
 
 
 def test_patch_account_with_password_length_smaller_than_3_character_returning_400_status_code(client, session):
+    """
+    GIVEN a Flask application
+    WHEN the '/account' URL is requested (PATCH) with invalid password value
+    THEN check the response HTTP 400 response
+    """
+
     user = create_user(session)
     tokens = create_tokens(user.username)
     endpoint = '/account'
@@ -36,6 +48,12 @@ def test_patch_account_with_password_length_smaller_than_3_character_returning_4
 
 
 def test_patch_account_with_an_user_already_excluded_returning_404_status_code(client, session):
+    """
+    GIVEN a Flask application
+    WHEN the '/account' URL is requested (PATCH) with inexistent user
+    THEN check the response HTTP 404 response
+    """
+
     user = create_user(session)
     tokens = create_tokens(user.username)
     # delete the user
@@ -52,6 +70,12 @@ def test_patch_account_with_an_user_already_excluded_returning_404_status_code(c
 
 
 def test_patch_account_without_data_returning_400_status_code(client, session):
+    """
+    GIVEN a Flask application
+    WHEN the '/account' URL is requested (PATCH) without data
+    THEN check the response HTTP 400 response
+    """
+
     user = create_user(session)
     tokens = create_tokens(user.username)
     endpoint = '/account'
@@ -63,7 +87,30 @@ def test_patch_account_without_data_returning_400_status_code(client, session):
     assert response.json['message'] == 'bad request'
 
 
+def test_patch_account_without_request_content_type_returning_400_status_code(client, session):
+    """
+    GIVEN a Flask application
+    WHEN the '/account' URL is requested (PATH) without the request content type
+    THEN check the response HTTP 400 response
+    """
+
+    user = create_user(session)
+    tokens = create_tokens(user.username)
+    endpoint = '/account'
+    response = client.patch(endpoint,
+                            headers={'Authorization': 'Bearer ' + tokens['access']['enconded']})
+    assert response.status_code == 400
+    assert response.json['status'] == 'fail'
+    assert response.json['message'] == 'bad request'      
+
+
 def test_patch_account_with_only_password_passed_returning_200_status_code(client, session, auth):
+    """
+    GIVEN a Flask application
+    WHEN the '/account' URL is requested (PATCH) passing only password
+    THEN check the response is valid
+    """
+
     user = create_user(session)
     tokens = create_tokens(user.username)
     endpoint = '/account'
