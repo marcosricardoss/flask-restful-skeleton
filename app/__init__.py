@@ -18,7 +18,7 @@ from flask import Flask
 from flask_jwt_extended import JWTManager
 
 
-def create_app(test_config: dict = None) -> Flask:
+def create_app(test_config: dict = {}) -> Flask:
     """This function is responsible to create a Flask instance according
     a previous setting passed from environment. In that process, it also
     initialise the database source.
@@ -43,7 +43,7 @@ def create_app(test_config: dict = None) -> Flask:
     return app
 
 
-def load_config(app: Flask, test_config: dict = {}) -> None:
+def load_config(app: Flask, test_config) -> None:
     """Load the application's config
 
     Parameters:
