@@ -40,6 +40,7 @@ def init(app: Flask) -> None:
     app.teardown_appcontext(shutdown_session)
 
     # Using Flask-Migrate as the handler for database migration.
+    from .model import User, Token
     migrate = Migrate(app, Base)
 
 
